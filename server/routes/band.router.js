@@ -51,6 +51,7 @@ router.post('/', (req, res) => {
     });
 });
 
+// TODO: Use archived at instead of delete, update updated_at
 router.delete('/:bandId', (req, res) => {
   //TODO: check authz
   const bandId = req.params.bandId;
@@ -89,6 +90,7 @@ router.get('/member/:bandId', (req, res) => {
 });
 
 // Add a user to a band
+// TODO: update updated_at
 router.post('/member/:bandId', (req, res) => {
   const userId = req.user.id; // TODO: validate user has rights to add users
   const bandId = req.params.bandId;
@@ -107,7 +109,9 @@ router.post('/member/:bandId', (req, res) => {
     })
 });
 
-// Delete a user from a band
+// Delete a user from a band.
+// We actually delete from this table rather than just archive.
+// Update updated_at?
 router.delete('/member/:bandId', (req, res) => {
   const requestingUser = req.user.id; //TODO: Verify access.
   const bandId = req.params.bandId;
