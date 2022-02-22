@@ -1,8 +1,3 @@
-
--- USER is a reserved keyword with Postgres
--- You must use double quotes in every query that user is in:
--- ex. SELECT * FROM "user";
--- Otherwise you will have errors!
 -- USER TABLE --
 
 CREATE TABLE "user" (
@@ -21,7 +16,7 @@ CREATE TABLE "user" (
 
 -- Mock user (not actually an admin)
 INSERT INTO "user" ("username", "email", "password", "first_name", "last_name")
-VALUES ('admin', 'nzahnow@gmail.com', 'password', 'Nick', 'Zahnow');
+VALUES ('admin', 'nzahnow@gmail.com', '$2a$10$6BuPLHx7AsAgO8x.5S4.Auk5K.0uep6KOY7LJuXbUUvmcmD84R4Ju', 'Nick', 'Zahnow'); --Password is 'password'
 
 
 -- BAND --
@@ -126,4 +121,3 @@ CREATE TABLE "clip_comment" (
 -- Mock comment
 INSERT INTO "clip_comment" ("user_id", "clip_id", "comment", "timestamp")
 VALUES ('1', '1', 'This is an example of a comment on a clip. Hypothetically it should reference 20 seconds into the clip.', '20');
-
