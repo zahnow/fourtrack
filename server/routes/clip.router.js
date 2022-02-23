@@ -108,4 +108,77 @@ router.delete('/:clipId', (req, res) => {
         });
 });
 
+///////////////////
+// COMMENTS
+///////////////////
+
+router.get('/comment/:clipId', (req, res) => {
+    const clipId = req.params.clipId;
+    const queryString = `
+        SELECT * FROM "clip_comment"
+        WHERE "clip_id" = $1;`;
+    pool.query(queryString, [clipId])
+    .then(response => {
+            res.send(response.rows);
+        })
+        .catch(error => {
+            console.log('error fetching comments:', error);
+            res.sendStatus(500);
+        })
+});
+
+router.post('/comment/:clipId', (req, res) => {
+    const userId = req.user.id;
+    const clipId = req.params.clipId;
+    const comment = req.body.comment;
+    const queryString = `
+        INSERT INTO "clip_comment" ("user_id", "clip_id", "comment")
+        VALUES($1, $2, $3);`;
+    pool.query(queryString, [userId, clipId, comment])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error posting comment:', error);
+            res.sendStatus(500);
+        })
+})
+
+router.put('/comment/:id', (req, res) => {
+    const comment = req.body.comment;
+    const commentId = req.params.id;
+    const userId = req.user.id;
+    const queryString = `
+        UPDATE "clip_comment"
+        SET "comment" = $1, "updated_at" = NOW()
+        FROM "song", "user_band"
+        WHERE "clip_comment"."id" = $2 AND ("user_band"."user_id" = $3 OR "song"."user_id" = $3);`;
+    pool.query(queryString, [comment, commentId, userId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error updating comment:', error);
+            res.sendStatus(500);
+        })
+})
+
+router.delete('/comment/:id', (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.user.id;
+    const queryString = `
+        UPDATE "clip_comment"
+        SET "archived_at" = NOW(), "updated_at" = NOW()
+        FROM "song", "user_band"
+        WHERE "clip_comment"."id" = $1 AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
+    pool.query(queryString, [commentId, userId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error updating comment:', error);
+            res.sendStatus(500);
+        })
+})
+
 module.exports = router;
