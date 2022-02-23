@@ -106,7 +106,7 @@ router.delete('/:songId', (req, res) => {
         SET "archived_at" = NOW(), "updated_at" = NOW()
         FROM "user_band"
         WHERE "song"."id" = $1 AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
-        
+
     pool.query(queryString, [songId, userId])
         .then(response => {
             res.sendStatus(200);
@@ -116,5 +116,79 @@ router.delete('/:songId', (req, res) => {
             res.sendStatus(500);
         });
     });
+
+
+///////////////////
+// COMMENTS
+///////////////////
+
+router.get('/comment/:songId', (req, res) => {
+    const songId = req.params.songId;
+    const queryString = `
+        SELECT * FROM "song_comment"
+        WHERE "song_id" = $1;`;
+    pool.query(queryString, [songId])
+        .then(response => {
+            res.send(response.rows);
+        })
+        .catch(error => {
+            console.log('error fetching comments:', error);
+            res.sendStatus(500);
+        })
+});
+
+router.post('/comment/:songId', (req, res) => {
+    const userId = req.user.id;
+    const songId = req.params.songId;
+    const comment = req.body.comment;
+    const queryString = `
+        INSERT INTO "song_comment" ("user_id", "song_id", "comment")
+        VALUES($1, $2, $3);`;
+    pool.query(queryString, [userId, songId, comment])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error posting comment:', error);
+            res.sendStatus(500);
+        })
+})
+
+router.put('/comment/:id', (req, res) => {
+    const comment = req.body.comment;
+    const commentId = req.params.id;
+    const userId = req.user.id;
+    const queryString = `
+        UPDATE "song_comment"
+        SET "comment" = $1, "updated_at" = NOW()
+        FROM "song", "user_band"
+        WHERE "song_comment"."id" = $2 AND ("user_band"."user_id" = $3 OR "song"."user_id" = $3);`;
+    pool.query(queryString, [comment, commentId, userId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error updating comment:', error);
+            res.sendStatus(500);
+        })
+})
+
+router.delete('/comment/:id', (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.user.id;
+    const queryString = `
+        UPDATE "song_comment"
+        SET "archived_at" = NOW(), "updated_at" = NOW()
+        FROM "song", "user_band"
+        WHERE "song_comment"."id" = $1 AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
+    pool.query(queryString, [commentId, userId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error updating comment:', error);
+            res.sendStatus(500);
+        })
+})
 
 module.exports = router;
