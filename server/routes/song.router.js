@@ -1,9 +1,12 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const {
+    rejectUnauthenticated,
+  } = require('../modules/authentication-middleware');
 
 // GET all songs user has access to
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
     SELECT 
@@ -29,7 +32,7 @@ router.get('/', (req, res) => {
 });
 
 // GET specific song for id
-router.get('/:songId', (req, res) => {
+router.get('/:songId', rejectUnauthenticated, (req, res) => {
     const songId = req.params.songId;
     const userId = req.user.id;
     const queryString = `
@@ -56,7 +59,7 @@ router.get('/:songId', (req, res) => {
 });
 
 //
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
     const songName = req.body.song_name;
     const songDescription = req.body.song_description;
     const bandId = req.body.band_id;
@@ -76,7 +79,7 @@ router.post('/', (req, res) => {
 
 // Update a song's name or description.
 // Currently no option to update a band or user.
-router.put('/:songId', (req, res) => {
+router.put('/:songId', rejectUnauthenticated, (req, res) => {
     const songName = req.body.song_name;
     const songDescription = req.body.song_description;
     const songId = req.params.songId;
@@ -98,7 +101,7 @@ router.put('/:songId', (req, res) => {
 });
 
 // archive a song, update updated_at
-router.delete('/:songId', (req, res) => {
+router.delete('/:songId', rejectUnauthenticated, (req, res) => {
     const songId = req.params.songId;
     const userId = req.user.id;
     const queryString = `
@@ -122,7 +125,7 @@ router.delete('/:songId', (req, res) => {
 // COMMENTS
 ///////////////////
 
-router.get('/comment/:songId', (req, res) => {
+router.get('/comment/:songId', rejectUnauthenticated, (req, res) => {
     const songId = req.params.songId;
     const queryString = `
         SELECT * FROM "song_comment"
@@ -137,7 +140,7 @@ router.get('/comment/:songId', (req, res) => {
         })
 });
 
-router.post('/comment/:songId', (req, res) => {
+router.post('/comment/:songId', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const songId = req.params.songId;
     const comment = req.body.comment;
@@ -154,7 +157,7 @@ router.post('/comment/:songId', (req, res) => {
         })
 })
 
-router.put('/comment/:id', (req, res) => {
+router.put('/comment/:id', rejectUnauthenticated, (req, res) => {
     const comment = req.body.comment;
     const commentId = req.params.id;
     const userId = req.user.id;
@@ -173,7 +176,7 @@ router.put('/comment/:id', (req, res) => {
         })
 })
 
-router.delete('/comment/:id', (req, res) => {
+router.delete('/comment/:id', rejectUnauthenticated, (req, res) => {
     const commentId = req.params.id;
     const userId = req.user.id;
     const queryString = `

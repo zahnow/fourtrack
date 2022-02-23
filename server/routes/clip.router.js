@@ -1,9 +1,12 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const {
+    rejectUnauthenticated,
+  } = require('../modules/authentication-middleware');
 
 
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
         SELECT * FROM "clip"
@@ -20,7 +23,7 @@ router.get('/', (req, res) => {
         });
 });
 
-router.get('/song/:songId', (req, res) => {
+router.get('/song/:songId', rejectUnauthenticated, (req, res) => {
     const songId = req.params.songId;
     const queryString = `
         SELECT * FROM "clip"
@@ -35,7 +38,7 @@ router.get('/song/:songId', (req, res) => {
         });
 });
 
-router.get('/band/:bandId', (req, res) => {
+router.get('/band/:bandId', rejectUnauthenticated, (req, res) => {
     const bandId = req.params.bandId;
     const queryString = `
         SELECT * FROM "clip"
@@ -52,7 +55,7 @@ router.get('/band/:bandId', (req, res) => {
 });
 
 // TODO: if we add user to clip, add it here
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
     const songId = req.body.song_id;
     const path = req.body.path;
     const name = req.body.name;
@@ -70,7 +73,7 @@ router.post('/', (req, res) => {
         })
 });
 
-router.put('/:clipId', (req, res) => {
+router.put('/:clipId', rejectUnauthenticated, (req, res) => {
     const name = req.body.name;
     const description = req.body.description;
     const clipId = req.params.clipId;
@@ -90,7 +93,7 @@ router.put('/:clipId', (req, res) => {
         });
 });
 
-router.delete('/:clipId', (req, res) => {
+router.delete('/:clipId', rejectUnauthenticated, (req, res) => {
     const clipId = req.params.clipId;
     const userId = req.user.id;
     const queryString = `
@@ -112,7 +115,7 @@ router.delete('/:clipId', (req, res) => {
 // COMMENTS
 ///////////////////
 
-router.get('/comment/:clipId', (req, res) => {
+router.get('/comment/:clipId', rejectUnauthenticated, (req, res) => {
     const clipId = req.params.clipId;
     const queryString = `
         SELECT * FROM "clip_comment"
@@ -127,7 +130,7 @@ router.get('/comment/:clipId', (req, res) => {
         })
 });
 
-router.post('/comment/:clipId', (req, res) => {
+router.post('/comment/:clipId', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const clipId = req.params.clipId;
     const comment = req.body.comment;
@@ -144,7 +147,7 @@ router.post('/comment/:clipId', (req, res) => {
         })
 })
 
-router.put('/comment/:id', (req, res) => {
+router.put('/comment/:id', rejectUnauthenticated, (req, res) => {
     const comment = req.body.comment;
     const commentId = req.params.id;
     const userId = req.user.id;
@@ -163,7 +166,7 @@ router.put('/comment/:id', (req, res) => {
         })
 })
 
-router.delete('/comment/:id', (req, res) => {
+router.delete('/comment/:id', rejectUnauthenticated, (req, res) => {
     const commentId = req.params.id;
     const userId = req.user.id;
     const queryString = `
