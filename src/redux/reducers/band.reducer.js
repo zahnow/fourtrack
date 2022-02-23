@@ -7,3 +7,5 @@ const bandReducer = (state=[], action) => {
             return state;
     }
 }
+
+export default bandReducer;

@@ -7,3 +7,5 @@ const clipReducer = (state=[], action) => {
             return state;
     }
 }
+
+export default clipReducer;

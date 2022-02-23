@@ -29,6 +29,9 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
+    dispatch({ type: 'FETCH_BAND' });
+    dispatch({ type: 'FETCH_SONG' });
+    dispatch({ type: 'FETCH_CLIP'});
   }, [dispatch]);
 
   return (

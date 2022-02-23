@@ -3,6 +3,23 @@ const pool = require('../modules/pool');
 const router = express.Router();
 
 
+router.get('/', (req, res) => {
+    const userId = req.user.id;
+    const queryString = `
+        SELECT * FROM "clip"
+        JOIN "song" on "clip"."song_id" = "song"."id"
+        JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
+        WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1;`;
+    pool.query(queryString, [userId])
+        .then(response => {
+            res.send(response.rows);
+        })
+        .catch(error => {
+            console.log('error fetching clips:', error);
+            res.sendStatus(500);
+        });
+});
+
 router.get('/song/:songId', (req, res) => {
     const songId = req.params.songId;
     const queryString = `
@@ -25,23 +42,6 @@ router.get('/band/:bandId', (req, res) => {
         JOIN "song" on "clip"."song_id" = "song"."id"
         WHERE "song"."band_id" = $1;`;
     pool.query(queryString, [bandId])
-        .then(response => {
-            res.send(response.rows);
-        })
-        .catch(error => {
-            console.log('error fetching clips:', error);
-            res.sendStatus(500);
-        });
-});
-
-router.get('/user/:userId', (req, res) => {
-    const userId = req.params.userId;
-    const queryString = `
-        SELECT * FROM "clip"
-        JOIN "song" on "clip"."song_id" = "song"."id"
-        JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
-        WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1;`;
-    pool.query(queryString, [userId])
         .then(response => {
             res.send(response.rows);
         })
