@@ -9,7 +9,7 @@ const {
 router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
-        SELECT * FROM "clip"
+        SELECT "clip"."id", "clip"."name", "clip"."archived_at", "clip"."song_id", "clip"."description", "clip"."start_time", "clip"."end_time", "clip"."path", "clip"."updated_at", "clip"."created_at" FROM "clip"
         JOIN "song" on "clip"."song_id" = "song"."id"
         JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
         WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1;`;
