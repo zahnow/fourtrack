@@ -42,10 +42,10 @@ router.get('/:bandId', rejectUnauthenticated, (req, res) => {
 router.post('/', rejectUnauthenticated, (req, res) => {
   const band_name = req.body.band_name;
 
-  const queryString = 'INSERT INTO "band" ("name") VALUES ($1);';
+  const queryString = 'INSERT INTO "band" ("name") VALUES ($1) RETURNING "id";';
   pool.query(queryString, [band_name])
     .then(response => {
-      res.sendStatus(201);
+      res.status(201).send(response.rows[0]);
     })
     .catch(error => {
       console.warn('Error creating band:', error);

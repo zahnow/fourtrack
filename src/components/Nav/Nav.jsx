@@ -1,9 +1,9 @@
 import './Nav.css';
-import { useDispatch } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Nav() {
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
   return (

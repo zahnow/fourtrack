@@ -20,6 +20,10 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
 import SongList from '../SongList/SongList';
+import SongDetail from '../SongDetail/SongDetail';
+import BandList from '../BandList/BandList';
+import BandDetail from '../BandDetail/BandDetail';
+import AddBand from '../AddBand/AddBand';
 
 function App() {
   const dispatch = useDispatch();
@@ -46,7 +50,6 @@ function App() {
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
           <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
             exact
             path="/user"
           >
@@ -54,11 +57,38 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
             exact
             path="/songs"
           >
             <SongList />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            path="/songs/:songId"
+          >
+            <SongDetail />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
+            path="/bands"
+          >
+            <BandList />
+          </ProtectedRoute>
+
+
+          <ProtectedRoute
+            exact
+            path="/bands/:bandId"
+          >
+            <BandDetail />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
+            path="/addband"
+          >
+            <AddBand />
           </ProtectedRoute>
 
           <Route

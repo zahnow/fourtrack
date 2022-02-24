@@ -9,7 +9,7 @@ const {
 router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
-    SELECT 
+    SELECT DISTINCT
         "song"."id", 
         "song"."band_id", 
         "song"."name", 

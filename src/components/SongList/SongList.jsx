@@ -1,3 +1,4 @@
+import './SongList.css';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -20,7 +21,7 @@ function SongList() {
                 <tbody>
                     {songs.map(song => {
                         return (
-                        <tr key={song.id}>
+                        <tr key={song.id} className='song-table-row' onClick={() => history.push(`/songs/${song.id}`)}>
                             <th>{song.name}</th>
                             <th>{song.description}</th>
                             <th>{song.updated_at}</th>
