@@ -24,6 +24,7 @@ import SongDetail from '../SongDetail/SongDetail';
 import BandList from '../BandList/BandList';
 import BandDetail from '../BandDetail/BandDetail';
 import AddBand from '../AddBand/AddBand';
+import AddSong from '../AddSong/AddSong';
 
 function App() {
   const dispatch = useDispatch();
@@ -70,12 +71,17 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute
+            path="/add-song"
+          >
+            <AddSong />
+          </ProtectedRoute>
+
+          <ProtectedRoute
             exact
             path="/bands"
           >
             <BandList />
           </ProtectedRoute>
-
 
           <ProtectedRoute
             exact

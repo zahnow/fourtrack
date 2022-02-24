@@ -11,8 +11,16 @@ function* fetchSong() {
     }
 }
 
-function* createSong() {
-
+function* createSong(action) {
+    try {
+        const song_name = action.payload.songName;
+        const song_description = action.payload.songDescription;
+        const band_id = action.payload.bandId;
+        yield axios.post(`/api/song`, {song_name, song_description, band_id});
+        yield put({type: 'FETCH_SONG'});
+    } catch (error) {
+        console.warn('Failed to create song', error);
+    }
 }
 
 function* addSongComment(action) {
@@ -22,7 +30,7 @@ function* addSongComment(action) {
         yield axios.post(`/api/song/comment/${songId}`, {comment: comment});
         yield put({type: 'FETCH_SONG'});
     } catch (error) {
-        console.warn('Failed to fetch song data', error);
+        console.warn('Failed to add song comment', error);
     }
 }
 
