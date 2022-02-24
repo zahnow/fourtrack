@@ -12,7 +12,7 @@ function BandList() {
             <ul>
                 {bands.map(band => {
                     return (
-                        <li><Link to={`/bands/${band.id}`}>{band.name}</Link></li>
+                        <li key={band.id}><Link to={`/bands/${band.id}`}>{band.name}</Link></li>
                     )
                 })}
             </ul>

@@ -9,17 +9,20 @@ const {
 router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
-    SELECT DISTINCT
+    SELECT DISTINCT 
         "song"."id", 
         "song"."band_id", 
         "song"."name", 
         "song"."created_at", 
         "song"."updated_at", 
         "song"."archived_at", 
-        "song"."description" 
+        "song"."description", 
+        COALESCE(JSONB_AGG(DISTINCT "song_comment") filter (where "song_comment"."id" is not null), '[]') as "comment" 
     FROM "song"
     JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
-    WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1;`;
+    LEFT JOIN "song_comment" ON "song"."id" = "song_comment"."song_id"
+    WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1
+    GROUP BY "song"."id";`;
     
     pool.query(queryString, [userId])
         .then(response => {

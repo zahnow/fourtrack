@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 function BandDetail() {
     const bands = useSelector(store => store.bands);
     const params = useParams();
+    const dispatch = useDispatch();
     const bandId = params.bandId;
     const band = bands.find(band => Number(band.id) === Number(bandId));
     const [members, setMembers] = useState([]);
+    const [addUserInput, setAddUserInput] = useState('');
 
     useEffect(() => {
         axios.get(`/api/band/member/${bandId}`)
@@ -19,6 +21,17 @@ function BandDetail() {
                 console.warn(error);
             });
     });
+
+    function handleAddMember() {
+        dispatch({
+            type: 'ADD_BAND_MEMBER', 
+            payload: {
+                bandId: bandId, 
+                userId: addUserInput, 
+                role: 'member'
+            }
+        });
+    }
 
     return (
         <div>
@@ -42,13 +55,22 @@ function BandDetail() {
                             </tr>
                         )
                     })}
-                    <tr>
-                        <td colSpan='3' >
-                            Add Member
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+            <div>
+                <h2>Add Member</h2>
+                <label htmlFor="username">
+                    Username:
+                    <input
+                        type="text"
+                        name="username"
+                        value={addUserInput}
+                        required
+                        onChange={(event) => setAddUserInput(event.target.value)}
+                    />
+                </label>
+                <button onClick={handleAddMember}>Add Member</button>
+            </div>
         </div>
     );
 }
