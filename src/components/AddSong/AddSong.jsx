@@ -15,8 +15,6 @@ function AddSong() {
         history.push('/songs');
     }
 
-    
-
     return (
         <div>
             <h1>Add Song</h1>

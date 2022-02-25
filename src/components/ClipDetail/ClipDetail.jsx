@@ -1,39 +1,30 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-function SongDetail() {
+function ClipDetail() {
     const dispatch = useDispatch();
     const params = useParams();
-    const songId = params.songId;
-    const songs = useSelector(store => store.songs);
-    const song = songs.find(song => Number(song?.id) === Number(songId));
+    const clipId = params.clipId;
+    const clips = useSelector(store => store.clips);
+    const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
-    const allClips = useSelector(store => store.clips);
-    const clips = allClips.filter(clip => Number(clip.song_id) === Number(songId));
 
     function handleAddComment() {
         dispatch({
-            type: 'ADD_SONG_COMMENT',
+            type: 'ADD_CLIP_COMMENT',
             payload: {
                 comment: commentInput,
-                songId: songId
+                clipId: clipId
             }
         });
     }
 
     return (
         <div>
-            <h1>{song?.name}</h1>
-            <h2>Clips</h2>
-            <ul>
-                {clips.map(clip => {
-                    return (
-                        <li>{clip.name}</li>
-                    )
-                })}
-            </ul>
-            <h2>Comments</h2>
+            <h1>{clip?.name}</h1>
+            {/* AUDIO GOES HEREEEEEE */}
+            <h2>Clip Comments</h2>
             <div>
                 <h3>New Comment</h3>
                 <div>
@@ -52,7 +43,7 @@ function SongDetail() {
             </div>
             <div>
                 <ul>
-                    {song?.comment?.length > 0 && song?.comment?.map(comment => {
+                    {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
                         return (
                             <li key={comment.id}>{comment.comment}</li>
                         )
@@ -60,7 +51,7 @@ function SongDetail() {
                 </ul>
             </div>
         </div>
-    );
+    )
 }
 
-export default SongDetail;
+export default ClipDetail;

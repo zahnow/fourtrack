@@ -33,6 +33,25 @@ function BandDetail() {
         });
     }
 
+    function handleDeleteBand() {
+        dispatch({
+            type: 'DELETE_BAND',
+            payload: {
+                bandId
+            }
+        })
+    }
+
+    function handleRemoveMember(userId) {
+        dispatch({
+            type: 'REMOVE_MEMBER',
+            payload: {
+                bandId,
+                userId
+            }
+        })
+    }
+
     return (
         <div>
             <img src={band?.band_profile_image_path} />
@@ -43,6 +62,7 @@ function BandDetail() {
                         <th>User</th>
                         <th>Name</th>
                         <th>Role</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,6 +72,7 @@ function BandDetail() {
                                 <td>{member.username}</td>
                                 <td>{`${member.first_name} ${member.last_name}`}</td>
                                 <td>{member.role}</td>
+                                <td><button onClick={() => handleRemoveMember(member.id)}>Remove</button></td>
                             </tr>
                         )
                     })}
@@ -70,6 +91,10 @@ function BandDetail() {
                     />
                 </label>
                 <button onClick={handleAddMember}>Add Member</button>
+            </div>
+            <div>
+                <h2>Delete Band</h2>
+                <button onClick={handleDeleteBand}>Delete</button>
             </div>
         </div>
     );

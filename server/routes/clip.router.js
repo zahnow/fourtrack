@@ -19,11 +19,14 @@ router.get('/', rejectUnauthenticated, (req, res) => {
             "clip"."end_time", 
             "clip"."path", 
             "clip"."updated_at", 
-            "clip"."created_at" 
+            "clip"."created_at", 
+            COALESCE(JSONB_AGG(DISTINCT "clip_comment") filter (where "clip_comment"."id" is not null), '[]') as "comment" 
             FROM "clip"
         JOIN "song" on "clip"."song_id" = "song"."id"
         JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
-        WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1;`;
+        LEFT JOIN "clip_comment" on "clip"."id" = "clip_comment"."clip_id"
+        WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1
+        GROUP BY "clip"."id";`;
     pool.query(queryString, [userId])
         .then(response => {
             res.send(response.rows);

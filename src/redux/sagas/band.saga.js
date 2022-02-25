@@ -47,10 +47,32 @@ function* addMember(action) {
     }
 }
 
+function* deleteBand(action) {
+    try {
+
+        yield put({type: 'FETCH_BAND'});
+    } catch (error) {
+        console.warn(error);
+    }
+}
+
+function* removeMember(action) {
+    try {
+        const user_id = action.payload.userId;
+        const bandId = action.payload.bandId;
+        yield axios.delete(`/api/band/member/${bandId}`, {data: {user_id}});
+        yield put({type: 'FETCH_BAND'});
+    } catch (error) {
+        console.warn(error);
+    }
+}
+
 function* bandSaga() {
     yield takeLatest('FETCH_BAND', fetchBand);
     yield takeLatest('CREATE_BAND', createBand);
     yield takeLatest('ADD_BAND_MEMBER', addMember);
+    yield takeLatest('DELETE_BAND', deleteBand);
+    yield takeLatest('REMOVE_MEMBER', removeMember);
 }
 
 export default bandSaga;

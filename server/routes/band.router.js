@@ -118,6 +118,7 @@ router.delete('/member/:bandId', rejectUnauthenticated, (req, res) => {
   const requestingUser = req.user.id; //TODO: Verify access.
   const bandId = req.params.bandId;
   const userId = req.body.user_id;
+  console.log(`deleting ${userId} from ${bandId}`);
   const queryString = `
     DELETE FROM "user_band"
     WHERE "user_id" = $1 AND "band_id" = $2;`;

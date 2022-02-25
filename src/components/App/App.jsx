@@ -25,6 +25,7 @@ import BandList from '../BandList/BandList';
 import BandDetail from '../BandDetail/BandDetail';
 import AddBand from '../AddBand/AddBand';
 import AddSong from '../AddSong/AddSong';
+import ClipDetail from '../ClipDetail/ClipDetail';
 
 function App() {
   const dispatch = useDispatch();
@@ -95,6 +96,13 @@ function App() {
             path="/addband"
           >
             <AddBand />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
+            path="/clips/:clipId"
+          >
+            <ClipDetail />
           </ProtectedRoute>
 
           <Route
