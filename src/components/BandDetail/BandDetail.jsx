@@ -1,16 +1,19 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 function BandDetail() {
     const bands = useSelector(store => store.bands);
     const params = useParams();
     const dispatch = useDispatch();
     const bandId = params.bandId;
+    const history = useHistory();
     const band = bands.find(band => Number(band.id) === Number(bandId));
     const [members, setMembers] = useState([]);
     const [addUserInput, setAddUserInput] = useState('');
+    const [editMode, setEditMode] = useState(false);
+    const [editNameInput, setEditNameInput] = useState('');
 
     useEffect(() => {
         axios.get(`/api/band/member/${bandId}`)
@@ -40,6 +43,7 @@ function BandDetail() {
                 bandId
             }
         })
+        history.push('/bands');
     }
 
     function handleRemoveMember(userId) {
@@ -52,6 +56,7 @@ function BandDetail() {
         })
     }
 
+    //Add guard for deleted bands
     return (
         <div>
             <img src={band?.band_profile_image_path} />

@@ -12,7 +12,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     SELECT  "band"."id", "band"."band_profile_image_path", "band"."name", "user_band"."role" FROM "band"
     JOIN "user_band" ON "band"."id" = "user_band"."band_id"
     JOIN "user" ON "user_band"."user_id" = "user"."id"
-    WHERE "user"."id" = $1;`
+    WHERE "user"."id" = $1 AND "band"."archived_at" is null;`
 
   pool.query(queryString, [userId])
     .then(response => {
@@ -57,7 +57,11 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 router.delete('/:bandId', rejectUnauthenticated, (req, res) => {
   //TODO: check authz
   const bandId = req.params.bandId;
-  const queryString = 'DELETE FROM "band" WHERE "id" = $1';
+  const queryString = `
+    UPDATE "band"
+    SET "archived_at" = NOW(), "updated_at" = NOW()
+    WHERE "band"."id" = $1;`;
+
   pool.query(queryString, [bandId])
     .then(response => {
       res.sendStatus(200);

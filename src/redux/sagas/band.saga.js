@@ -49,7 +49,8 @@ function* addMember(action) {
 
 function* deleteBand(action) {
     try {
-
+        const bandId = action.payload.bandId;
+        yield axios.delete(`api/band/${bandId}`)
         yield put({type: 'FETCH_BAND'});
     } catch (error) {
         console.warn(error);
