@@ -24,7 +24,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     })
 });
 
-//Get info for a specific band.
+//Get info for a specific band. not needed?
 router.get('/:bandId', rejectUnauthenticated, (req, res) => {
   const bandId = req.params.bandId;
   const queryString = `SELECT * FROM "band" WHERE "band"."id"=$1;`;
@@ -41,9 +41,9 @@ router.get('/:bandId', rejectUnauthenticated, (req, res) => {
 
 router.post('/', rejectUnauthenticated, (req, res) => {
   const band_name = req.body.band_name;
-
-  const queryString = 'INSERT INTO "band" ("name") VALUES ($1) RETURNING "id";';
-  pool.query(queryString, [band_name])
+  const band_profile_image_path = req.body.band_profile_image_path;
+  const queryString = 'INSERT INTO "band" ("name", "band_profile_image_path") VALUES ($1, $2) RETURNING "id";';
+  pool.query(queryString, [band_name, band_profile_image_path])
     .then(response => {
       res.status(201).send(response.rows[0]);
     })

@@ -15,8 +15,9 @@ function* createBand(action) {
     try {
         console.log('create band', action.payload);
         const band_name = action.payload.band_name;
+        const band_profile_image_path = action.payload.band_profile_image_path;
         const user_id = action.payload.user_id;
-        const response = yield axios.post('/api/band', {band_name});
+        const response = yield axios.post('/api/band', {band_name, band_profile_image_path});
         yield put({
             type: 'ADD_BAND_MEMBER', 
             payload: {
