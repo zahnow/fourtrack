@@ -10,6 +10,27 @@ function* fetchClip() {
     }
 }
 
+function* createClip(action) {
+    try {
+        const song_id = action.payload.song_id;
+        const name = action.payload.name;
+        const path = action.payload.path;
+        const description = action.payload.description;
+
+        yield axios.post(
+            `/api/clip`,
+            {
+                song_id,
+                name,
+                path,
+                description
+            });
+        yield put({type: 'FETCH_CLIP'});
+    } catch (error) {
+        console.warn('Failed to add clip', error);
+    }
+}
+
 function* addClipComment(action) {
     try {
         const clipId = action.payload.clipId;
@@ -24,6 +45,7 @@ function* addClipComment(action) {
 function* clipSaga() {
     yield takeLatest('FETCH_CLIP', fetchClip);
     yield takeLatest('ADD_CLIP_COMMENT', addClipComment);
+    yield takeLatest('CREATE_CLIP', createClip);
 }
 
 export default clipSaga;

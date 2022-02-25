@@ -24,6 +24,7 @@ function ClipDetail() {
         <div>
             <h1>{clip?.name}</h1>
             {/* AUDIO GOES HEREEEEEE */}
+                <audio controls src={clip?.path}/>
             <h2>Clip Comments</h2>
             <div>
                 <h3>New Comment</h3>

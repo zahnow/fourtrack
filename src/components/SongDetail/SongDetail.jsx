@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 function SongDetail() {
     const dispatch = useDispatch();
     const params = useParams();
+    const history = useHistory();
     const songId = params.songId;
     const songs = useSelector(store => store.songs);
     const song = songs.find(song => Number(song?.id) === Number(songId));
@@ -22,10 +23,16 @@ function SongDetail() {
         });
     }
 
+    function handleAddClip() {
+        history.push(`/songs/${songId}/add-clip`);
+    }
+
     return (
         <div>
             <h1>{song?.name}</h1>
             <h2>Clips</h2>
+            <h3>Add Clip</h3>
+            <button onClick={handleAddClip}>Add Clip</button>
             <ul>
                 {clips.map(clip => {
                     return (
