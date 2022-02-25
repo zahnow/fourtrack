@@ -12,6 +12,7 @@ function BandDetail() {
     const band = bands.find(band => Number(band.id) === Number(bandId));
     const [members, setMembers] = useState([]);
     const [addUserInput, setAddUserInput] = useState('');
+    //TODO: Add band name editing
     const [editMode, setEditMode] = useState(false);
     const [editNameInput, setEditNameInput] = useState('');
 

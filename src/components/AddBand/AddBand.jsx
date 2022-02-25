@@ -9,6 +9,7 @@ function AddBand() {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    // TODO: REmove user from this dispatch
     function handleAddBand() {
         dispatch({type: 'CREATE_BAND', payload: {band_name: bandName, user_id: user.id}});
         history.push('/bands');
