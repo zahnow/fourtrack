@@ -7,6 +7,7 @@ function RegisterForm() {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [imagePath, setImagePath] = useState('');
   const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
 
@@ -20,10 +21,33 @@ function RegisterForm() {
         password: password,
         email: email,
         first_name: firstName,
-        last_name: lastName
+        last_name: lastName,
+        image_path: imagePath
       },
     });
   }; // end registerUser
+
+  function handleImageUpload() {
+    event.preventDefault();
+    console.log(process.env);
+    console.log('in handle upload');
+    cloudinary.createUploadWidget({
+        sources: ['local'],
+        multiple: false,
+        clientAllowedFormats: ["png", "jpeg", "jpeg"],
+        // cloudName: 'dihyja7id',
+        // uploadPreset: 'l4d3xwai'
+        cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
+        uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+    },
+        (error, result) => {
+            if (!error && result && result.event === "success") {
+                console.log('Done! Here is the image info: ', result.info);
+                setImagePath(result.info.secure_url);
+            }
+        }
+    ).open();
+}
 
   return (
     <form className="formPanel" onSubmit={registerUser}>
@@ -92,6 +116,9 @@ function RegisterForm() {
             onChange={(event) => setLastName(event.target.value)}
           />
         </label>
+      </div>
+      <div>
+        <button onClick={handleImageUpload}>Add Image</button>
       </div>
       <div>
         <input className="btn" type="submit" name="submit" value="Register" />
