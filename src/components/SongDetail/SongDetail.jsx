@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 
 function SongDetail() {
     const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function SongDetail() {
             <ul>
                 {clips.map(clip => {
                     return (
-                        <li>{clip.name}</li>
+                        <li><Link to={`/clips/${clip.id}`} > {clip.name}</Link></li>
                     )
                 })}
             </ul>

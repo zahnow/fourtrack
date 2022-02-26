@@ -2,9 +2,9 @@ import axios from "axios";
 import { put, takeLatest } from 'redux-saga/effects';
 
 function* fetchClip() {
-    try{
+    try {
         const response = yield axios.get('/api/clip/');
-        yield put({type: 'SET_CLIP', payload: response.data});
+        yield put({ type: 'SET_CLIP', payload: response.data });
     } catch (error) {
         console.warn('Failed to fetch clip data', error);
     }
@@ -25,7 +25,7 @@ function* createClip(action) {
                 path,
                 description
             });
-        yield put({type: 'FETCH_CLIP'});
+        yield put({ type: 'FETCH_CLIP' });
     } catch (error) {
         console.warn('Failed to add clip', error);
     }
@@ -35,10 +35,20 @@ function* addClipComment(action) {
     try {
         const clipId = action.payload.clipId;
         const comment = action.payload.comment;
-        yield axios.post(`/api/clip/comment/${clipId}`, {comment: comment});
-        yield put({type: 'FETCH_CLIP'});
+        yield axios.post(`/api/clip/comment/${clipId}`, { comment: comment });
+        yield put({ type: 'FETCH_CLIP' });
     } catch (error) {
         console.warn('Failed to add clip comment', error);
+    }
+}
+
+function* deleteClip(action) {
+    try {
+        const clipId = action.payload.clipId;
+        yield axios.delete(`/api/clip/${clipId}`);
+        yield put({ type: 'FETCH_CLIP' });
+    } catch (error) {
+        console.warn('Failed to delete clip', error);
     }
 }
 
@@ -46,6 +56,7 @@ function* clipSaga() {
     yield takeLatest('FETCH_CLIP', fetchClip);
     yield takeLatest('ADD_CLIP_COMMENT', addClipComment);
     yield takeLatest('CREATE_CLIP', createClip);
+    yield takeLatest('DELETE_CLIP', deleteClip);
 }
 
 export default clipSaga;

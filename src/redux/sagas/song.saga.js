@@ -39,7 +39,8 @@ function* deleteSong(action) {
         console.log('in delete song saga');
         const songId = action.payload.songId;
         yield axios.delete(`/api/song/${songId}`);
-        yield put({type: 'FETCH_SONG'});        
+        yield put({type: 'FETCH_SONG'}); 
+        yield put({type: 'FETCH_CLIP'});
     } catch (error) {
         console.warn('Failed to delete song', error);
     }

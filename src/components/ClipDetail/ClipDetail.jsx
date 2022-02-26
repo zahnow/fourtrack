@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 function ClipDetail() {
     const dispatch = useDispatch();
     const params = useParams();
+    const history = useHistory();
     const clipId = params.clipId;
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
@@ -18,6 +19,17 @@ function ClipDetail() {
                 clipId: clipId
             }
         });
+    }
+
+    function handleDeleteClip() {
+        const songId = clip.song_id;
+        dispatch({
+            type: 'DELETE_CLIP',
+            payload: {
+                clipId
+            }
+        });
+        history.push(`/songs/${songId}`);
     }
 
     return (
@@ -50,6 +62,10 @@ function ClipDetail() {
                         )
                     })}
                 </ul>
+            </div>
+            <div>
+                <h2>Delete Clip</h2>
+                <button onClick={handleDeleteClip} >Delete Clip</button>
             </div>
         </div>
     )

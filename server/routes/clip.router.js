@@ -40,37 +40,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         });
 });
 
-router.get('/song/:songId', rejectUnauthenticated, (req, res) => {
-    const songId = req.params.songId;
-    const queryString = `
-        SELECT * FROM "clip"
-        WHERE "song_id" = $1;`;
-    pool.query(queryString, [songId])
-        .then(response => {
-            res.send(response.rows);
-        })
-        .catch(error => {
-            console.log('error fetching clips:', error);
-            res.sendStatus(500);
-        });
-});
-
-router.get('/band/:bandId', rejectUnauthenticated, (req, res) => {
-    const bandId = req.params.bandId;
-    const queryString = `
-        SELECT * FROM "clip"
-        JOIN "song" on "clip"."song_id" = "song"."id"
-        WHERE "song"."band_id" = $1;`;
-    pool.query(queryString, [bandId])
-        .then(response => {
-            res.send(response.rows);
-        })
-        .catch(error => {
-            console.log('error fetching clips:', error);
-            res.sendStatus(500);
-        });
-});
-
 // TODO: if we add user to clip, add it here
 router.post('/', rejectUnauthenticated, (req, res) => {
     const songId = req.body.song_id;
