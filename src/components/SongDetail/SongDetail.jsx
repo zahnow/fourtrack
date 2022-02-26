@@ -27,6 +27,16 @@ function SongDetail() {
         history.push(`/songs/${songId}/add-clip`);
     }
 
+    function handleDeleteSong() {
+        dispatch({
+            type: 'DELETE_SONG',
+            payload: {
+                songId
+            }
+        });
+        history.push(`/songs/`);
+    }
+
     return (
         <div>
             <h1>{song?.name}</h1>
@@ -65,6 +75,10 @@ function SongDetail() {
                         )
                     })}
                 </ul>
+            </div>
+            <div>
+                <h2>Delete Song?</h2>
+                <button onClick={handleDeleteSong}>Delete Song</button>
             </div>
         </div>
     );

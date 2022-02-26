@@ -25,7 +25,10 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         JOIN "song" on "clip"."song_id" = "song"."id"
         JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
         LEFT JOIN "clip_comment" on "clip"."id" = "clip_comment"."clip_id"
-        WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1
+        WHERE 
+            "clip"."archived_at" IS NULL AND 
+            "song"."archived_at" IS NULL AND 
+            ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
         GROUP BY "clip"."id";`;
     pool.query(queryString, [userId])
         .then(response => {

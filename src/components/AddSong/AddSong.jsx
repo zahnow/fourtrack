@@ -6,7 +6,7 @@ function AddSong() {
     const bands = useSelector(store => store.bands);
     const [songName, setSongName] = useState('');
     const [songDescription, setSongDescription] = useState('');
-    const [bandId, setBandId] = useState('');
+    const [bandId, setBandId] = useState(bands[0]?.id);
     const dispatch = useDispatch();
     const history = useHistory();
 

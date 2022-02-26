@@ -34,10 +34,22 @@ function* addSongComment(action) {
     }
 }
 
+function* deleteSong(action) {
+    try {
+        console.log('in delete song saga');
+        const songId = action.payload.songId;
+        yield axios.delete(`/api/song/${songId}`);
+        yield put({type: 'FETCH_SONG'});        
+    } catch (error) {
+        console.warn('Failed to delete song', error);
+    }
+}
+
 function* songSaga() {
     yield takeLatest('FETCH_SONG', fetchSong);
     yield takeLatest('CREATE_SONG', createSong)
     yield takeLatest('ADD_SONG_COMMENT', addSongComment);
+    yield takeLatest('DELETE_SONG', deleteSong);
 }
 
 export default songSaga;

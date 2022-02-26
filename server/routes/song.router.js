@@ -21,7 +21,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     FROM "song"
     JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
     LEFT JOIN "song_comment" ON "song"."id" = "song_comment"."song_id"
-    WHERE "user_band"."user_id" = $1 OR "song"."user_id" = $1
+    WHERE "song"."archived_at" is null AND ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
     GROUP BY "song"."id";`;
     
     pool.query(queryString, [userId])
@@ -49,7 +49,7 @@ router.get('/:songId', rejectUnauthenticated, (req, res) => {
         "song"."description" 
     FROM "song"
     JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
-    WHERE "song"."id" = $1 AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
+    WHERE "song"."id" = $1 AND "song"."archived_at" is null AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
     
     pool.query(queryString, [songId, userId])
         .then(response => {
