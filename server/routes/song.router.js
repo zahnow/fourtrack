@@ -9,49 +9,37 @@ const {
 router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
-    SELECT DISTINCT 
-        "song"."id", 
-        "song"."band_id", 
-        "song"."name", 
-        "song"."created_at", 
-        "song"."updated_at", 
-        "song"."archived_at", 
-        "song"."description", 
-        COALESCE(JSONB_AGG(DISTINCT "song_comment") filter (where "song_comment"."id" is not null), '[]') as "comment" 
-    FROM "song"
-    JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
-    LEFT JOIN "song_comment" ON "song"."id" = "song_comment"."song_id"
-    WHERE "song"."archived_at" is null AND ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
-    GROUP BY "song"."id";`;
+        SELECT DISTINCT 
+    	    "song"."id", 
+        	"song"."band_id", 
+    	    "song"."name", 
+    	    "song"."created_at", 
+    	    "song"."updated_at", 
+    	    "song"."archived_at", 
+    	    "song"."description", 
+    	    COALESCE(
+    		    JSONB_AGG(
+    			    DISTINCT JSONB_BUILD_OBJECT(
+    				    'id', "song_comment"."id",
+        				'comment', "song_comment"."comment", 
+    	    			'song_id', "song_comment"."song_id",
+    		    		'created_at', "song_comment"."created_at",
+    			    	'updated_at', "song_comment"."updated_at",
+    				    'archived_at', "song_comment"."archived_at",
+        				'user_id', "song_comment"."user_id",
+    	    			'username', "user"."username",
+    		    		'image_path', "user"."user_profile_image_path"
+    			    )
+                ) filter(where "song_comment"."id" is not null AND "song_comment"."archived_at" is null), 
+    		    '[]') as "comment" 
+        FROM "song"
+        JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
+        LEFT JOIN "song_comment" ON "song"."id" = "song_comment"."song_id"
+        JOIN "user" ON "song_comment"."user_id" = "user"."id"
+        WHERE "song"."archived_at" is null AND ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
+        GROUP BY "song"."id";`;
     
     pool.query(queryString, [userId])
-        .then(response => {
-            res.send(response.rows);
-        })
-        .catch(error => {
-            console.log('Error retrieving songs:', error);
-            res.sendStatus(500);
-        });
-});
-
-// GET specific song for id
-router.get('/:songId', rejectUnauthenticated, (req, res) => {
-    const songId = req.params.songId;
-    const userId = req.user.id;
-    const queryString = `
-    SELECT 
-        "song"."id", 
-        "song"."band_id", 
-        "song"."name", 
-        "song"."created_at", 
-        "song"."updated_at", 
-        "song"."archived_at", 
-        "song"."description" 
-    FROM "song"
-    JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
-    WHERE "song"."id" = $1 AND "song"."archived_at" is null AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
-    
-    pool.query(queryString, [songId, userId])
         .then(response => {
             res.send(response.rows);
         })

@@ -7,6 +7,7 @@ function SongDetail() {
     const params = useParams();
     const history = useHistory();
     const songId = params.songId;
+    const user = useSelector(store => store.user);
     const songs = useSelector(store => store.songs);
     const song = songs.find(song => Number(song?.id) === Number(songId));
     const [commentInput, setCommentInput] = useState('');
@@ -35,6 +36,16 @@ function SongDetail() {
             }
         });
         history.push(`/songs/`);
+    }
+
+    function handleDeleteComment(commentId) {
+        console.log(commentId)
+        dispatch({
+            type: 'DELETE_SONG_COMMENT',
+            payload: {
+                commentId
+            }
+        })
     }
 
     return (
@@ -71,7 +82,10 @@ function SongDetail() {
                 <ul>
                     {song?.comment?.length > 0 && song?.comment?.map(comment => {
                         return (
-                            <li key={comment.id}>{comment.comment}</li>
+                            <li key={comment.id}>{comment.comment} - {comment.username} 
+                                {comment.user_id === user.id && 
+                                    <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>}
+                            </li>
                         )
                     })}
                 </ul>
