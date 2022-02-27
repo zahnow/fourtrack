@@ -64,8 +64,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     const name = req.body.name;
     const description = req.body.description;
     const queryString = `
-        INSERT INTO "clip" ("song_id", "path", "name", "description")
-        VALUES ($1, $2, $3, $4);`;
+        INSERT INTO "clip" ("song_id", "path", "name", "description", "created_at", "updated_at")
+        VALUES ($1, $2, $3, $4, NOW(), NOW());`;
     pool.query(queryString, [songId, path, name, description])
         .then(response => {
             res.sendStatus(201);
@@ -138,8 +138,8 @@ router.post('/comment/:clipId', rejectUnauthenticated, (req, res) => {
     const clipId = req.params.clipId;
     const comment = req.body.comment;
     const queryString = `
-        INSERT INTO "clip_comment" ("user_id", "clip_id", "comment")
-        VALUES($1, $2, $3);`;
+        INSERT INTO "clip_comment" ("user_id", "clip_id", "comment", "created_at", "updated_at")
+        VALUES($1, $2, $3, NOW(), NOW());`;
     pool.query(queryString, [userId, clipId, comment])
         .then(response => {
             res.sendStatus(200);

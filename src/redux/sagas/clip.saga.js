@@ -25,6 +25,7 @@ function* createClip(action) {
                 path,
                 description
             });
+        yield put({ type: 'UPDATE_SONG', payload: {songId: song_id}})
         yield put({ type: 'FETCH_CLIP' });
     } catch (error) {
         console.warn('Failed to add clip', error);

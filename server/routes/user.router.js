@@ -25,8 +25,8 @@ router.post('/register', (req, res, next) => {
   const last_name = req.body.last_name;
   const user_profile_image_path = req.body.image_path;
 
-  const queryText = `INSERT INTO "user" (username, password, email, first_name, last_name, user_profile_image_path)
-    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
+  const queryText = `INSERT INTO "user" (username, password, email, first_name, last_name, user_profile_image_path, "created_at", "updated_at")
+    VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW()) RETURNING id`;
   pool
     .query(queryText, [username, password, email, first_name, last_name, user_profile_image_path])
     .then(() => res.sendStatus(201))

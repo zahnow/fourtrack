@@ -56,10 +56,25 @@ function* deleteSongComment(action) {
     }
 }
 
+function* updateSong(action) {
+    try {
+        const songId = action.payload.songId;
+        const songName = action.payload.songName;
+        const songDescription = action.payload.songDescription;
+        // console.log('song name:', songName);
+        // console.log('song id:', songId);
+        axios.put(`/api/song/${songId}`, {songName, songDescription});
+        yield put({type: 'FETCH_SONG'}); 
+    } catch (error) {
+        console.warn('Failed to update song', error);
+    }
+}
+
 function* songSaga() {
     yield takeLatest('FETCH_SONG', fetchSong);
     yield takeLatest('CREATE_SONG', createSong)
     yield takeLatest('ADD_SONG_COMMENT', addSongComment);
+    yield takeLatest('UPDATE_SONG', updateSong);
     yield takeLatest('DELETE_SONG', deleteSong);
     yield takeLatest('DELETE_SONG_COMMENT', deleteSongComment);
 }

@@ -42,7 +42,11 @@ router.get('/:bandId', rejectUnauthenticated, (req, res) => {
 router.post('/', rejectUnauthenticated, (req, res) => {
   const band_name = req.body.band_name;
   const band_profile_image_path = req.body.band_profile_image_path;
-  const queryString = 'INSERT INTO "band" ("name", "band_profile_image_path") VALUES ($1, $2) RETURNING "id";';
+  const queryString = `
+    INSERT INTO "band" ("name", "band_profile_image_path", "created_at", "updated_at") 
+    VALUES ($1, $2, NOW(), NOW()) 
+    RETURNING "id";`;
+
   pool.query(queryString, [band_name, band_profile_image_path])
     .then(response => {
       res.status(201).send(response.rows[0]);

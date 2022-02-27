@@ -3,7 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const {
     rejectUnauthenticated,
-  } = require('../modules/authentication-middleware');
+} = require('../modules/authentication-middleware');
 
 // GET all songs user has access to
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -38,7 +38,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         LEFT JOIN "user" ON "song_comment"."user_id" = "user"."id"
         WHERE "song"."archived_at" is null AND ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
         GROUP BY "song"."id";`;
-    
+
     pool.query(queryString, [userId])
         .then(response => {
             res.send(response.rows);
@@ -71,24 +71,47 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 // Update a song's name or description.
 // Currently no option to update a band or user.
 router.put('/:songId', rejectUnauthenticated, (req, res) => {
-    const songName = req.body.song_name;
-    const songDescription = req.body.song_description;
+    const songName = req.body.songName;
+    const songDescription = req.body.songDescription;
     const songId = req.params.songId;
     const userId = req.user.id;
-    const queryString = `
-        UPDATE "song" 
-        SET "name" = $1, "description" = $2, "updated_at" = NOW()
-        FROM "user_band"
-        WHERE "song"."id" = $3 AND ("user_band"."user_id" = $4 OR "song"."user_id" = $4);`;
 
-    pool.query(queryString, [songName, songDescription, songId, userId])
-        .then(response => {
-            res.sendStatus(200);
-        })
-        .catch(error => {
-            console.log('Error updating song:', error);
-            res.sendStatus(500);
-        })
+    // This might be awkward, but just to save myself some effort if songName or songDescription don't get passed,
+    // Just update the updated_at timestamp.
+    if (songName || songDescription) {
+        console.log('full update for song');
+        const queryString = `
+            UPDATE "song" 
+            SET "name" = $1, "description" = $2, "updated_at" = NOW()
+            FROM "user_band"
+            WHERE "song"."id" = $3 AND ("user_band"."user_id" = $4 OR "song"."user_id" = $4);`;
+
+        pool.query(queryString, [songName, songDescription, songId, userId])
+            .then(response => {
+                res.sendStatus(200);
+            })
+            .catch(error => {
+                console.log('Error updating song:', error);
+                res.sendStatus(500);
+            })
+    } else {
+        console.log('just update the song updated_at');
+        const queryString = `
+            UPDATE "song" 
+            SET "updated_at" = NOW()
+            FROM "user_band"
+            WHERE "song"."id" = $1 AND ("user_band"."user_id" = $2 OR "song"."user_id" = $2);`;
+
+        pool.query(queryString, [songId, userId])
+            .then(response => {
+                res.sendStatus(200);
+            })
+            .catch(error => {
+                console.log('Error updating song:', error);
+                res.sendStatus(500);
+            })
+    }
+
 });
 
 // archive a song, update updated_at
@@ -109,7 +132,7 @@ router.delete('/:songId', rejectUnauthenticated, (req, res) => {
             console.log('Error deleting song:', error);
             res.sendStatus(500);
         });
-    });
+});
 
 
 ///////////////////
@@ -136,8 +159,8 @@ router.post('/comment/:songId', rejectUnauthenticated, (req, res) => {
     const songId = req.params.songId;
     const comment = req.body.comment;
     const queryString = `
-        INSERT INTO "song_comment" ("user_id", "song_id", "comment")
-        VALUES($1, $2, $3);`;
+        INSERT INTO "song_comment" ("user_id", "song_id", "comment", "created_at", "updated_at")
+        VALUES($1, $2, $3, NOW(), NOW());`;
     pool.query(queryString, [userId, songId, comment])
         .then(response => {
             res.sendStatus(200);
