@@ -35,7 +35,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         FROM "song"
         JOIN "user_band" ON "song"."band_id" = "user_band"."band_id"
         LEFT JOIN "song_comment" ON "song"."id" = "song_comment"."song_id"
-        JOIN "user" ON "song_comment"."user_id" = "user"."id"
+        LEFT JOIN "user" ON "song_comment"."user_id" = "user"."id"
         WHERE "song"."archived_at" is null AND ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
         GROUP BY "song"."id";`;
     
@@ -56,8 +56,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     const bandId = req.body.band_id;
     const userId = req.user.id;
     const queryString = `
-        INSERT INTO "song" ("name", "band_id", "user_id", "description")
-        VALUES ($1, $2, $3, $4);`;
+        INSERT INTO "song" ("name", "band_id", "user_id", "description", "created_at", "updated_at")
+        VALUES ($1, $2, $3, $4, NOW(), NOW());`;
     pool.query(queryString, [songName, bandId, userId, songDescription])
         .then(response => {
             res.sendStatus(201);
