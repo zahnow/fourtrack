@@ -7,6 +7,7 @@ function ClipDetail() {
     const params = useParams();
     const history = useHistory();
     const clipId = params.clipId;
+    const user = useSelector(store => store.user);
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
@@ -30,6 +31,17 @@ function ClipDetail() {
             }
         });
         history.push(`/songs/${songId}`);
+    }
+
+
+    function handleDeleteComment(commentId) {
+        console.log(commentId)
+        dispatch({
+            type: 'DELETE_CLIP_COMMENT',
+            payload: {
+                commentId
+            }
+        })
     }
 
     return (
@@ -58,7 +70,10 @@ function ClipDetail() {
                 <ul>
                     {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
                         return (
-                            <li key={comment.id}>{comment.comment}</li>
+                            <li key={comment.id}>{comment.comment} - {comment.username}
+                                {comment.user_id === user.id && 
+                                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>}
+                            </li>
                         )
                     })}
                 </ul>

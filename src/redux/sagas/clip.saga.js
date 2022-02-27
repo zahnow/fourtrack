@@ -52,11 +52,22 @@ function* deleteClip(action) {
     }
 }
 
+function* deleteClipComment(action) {
+    try {
+        const commentId = action.payload.commentId;
+        yield axios.delete(`/api/clip/comment/${commentId}`);
+        yield put({ type: 'FETCH_CLIP' });
+    } catch (error) {
+        console.warn('Failed to delete clip comment', error);
+    }
+}
+
 function* clipSaga() {
     yield takeLatest('FETCH_CLIP', fetchClip);
     yield takeLatest('ADD_CLIP_COMMENT', addClipComment);
     yield takeLatest('CREATE_CLIP', createClip);
     yield takeLatest('DELETE_CLIP', deleteClip);
+    yield takeLatest('DELETE_CLIP_COMMENT', deleteClipComment);
 }
 
 export default clipSaga;

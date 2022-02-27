@@ -3,33 +3,50 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const {
     rejectUnauthenticated,
-  } = require('../modules/authentication-middleware');
+} = require('../modules/authentication-middleware');
 
 
 router.get('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
-        SELECT DISTINCT 
-            "clip"."id", 
-            "clip"."name", 
-            "clip"."archived_at", 
-            "clip"."song_id", 
-            "clip"."description", 
-            "clip"."start_time", 
-            "clip"."end_time", 
-            "clip"."path", 
-            "clip"."updated_at", 
-            "clip"."created_at", 
-            COALESCE(JSONB_AGG(DISTINCT "clip_comment") filter (where "clip_comment"."id" is not null), '[]') as "comment" 
-            FROM "clip"
+        SELECT 
+    	"clip"."id", 
+    	"clip"."name", 
+    	"clip"."archived_at", 
+    	"clip"."song_id", 
+    	"clip"."description", 
+    	"clip"."start_time", 
+    	"clip"."end_time", 
+    	"clip"."path", 
+    	"clip"."updated_at", 
+    	"clip"."created_at",
+    	COALESCE(
+    		JSONB_AGG(
+    			DISTINCT JSONB_BUILD_OBJECT(
+    			'id', "clip_comment"."id",
+    			'comment', "clip_comment"."comment",
+    			'created_at', "clip_comment"."created_at",
+    			'updated_at', "clip_comment"."updated_at",
+    			'archived_at', "clip_comment"."archived_at",
+    			'timestemp', "clip_comment"."timestamp",
+    			'user_id', "clip_comment"."user_id",
+    			'clip_id', "clip_comment"."clip_id",
+    			'username', "user"."username",
+    			'image_path', "user"."user_profile_image_path"
+    			)
+    		) filter(where "clip_comment"."id" is not null AND "clip_comment"."archived_at" is null),
+    		'[]') as "comment" 
+        FROM "clip"
         JOIN "song" on "clip"."song_id" = "song"."id"
         JOIN "user_band" on "song"."band_id" = "user_band"."band_id"
         LEFT JOIN "clip_comment" on "clip"."id" = "clip_comment"."clip_id"
+        LEFT JOIN "user" on "clip_comment"."user_id" = "user"."id"
         WHERE 
-            "clip"."archived_at" IS NULL AND 
-            "song"."archived_at" IS NULL AND 
-            ("user_band"."user_id" = $1 OR "song"."user_id" = $1)
+        	"clip"."archived_at" IS NULL AND 
+        	"song"."archived_at" IS NULL AND 
+        	("user_band"."user_id" = $1 OR "song"."user_id" = $1)
         GROUP BY "clip"."id";`;
+
     pool.query(queryString, [userId])
         .then(response => {
             res.send(response.rows);
@@ -107,7 +124,7 @@ router.get('/comment/:clipId', rejectUnauthenticated, (req, res) => {
         SELECT * FROM "clip_comment"
         WHERE "clip_id" = $1;`;
     pool.query(queryString, [clipId])
-    .then(response => {
+        .then(response => {
             res.send(response.rows);
         })
         .catch(error => {
