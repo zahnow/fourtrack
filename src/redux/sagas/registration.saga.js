@@ -22,8 +22,18 @@ function* registerUser(action) {
   }
 }
 
+function* mailingList(action) {
+  try {
+    const email = action.payload.email;
+    yield axios.put('/api/user/mailing-list', {email: email});
+  } catch (error) {
+    console.log('Error with mailing list registration:', error);
+  }
+}
+
 function* registrationSaga() {
   yield takeLatest('REGISTER', registerUser);
+  yield takeLatest('REGISTER_MAILING_LIST', mailingList);
 }
 
 export default registrationSaga;

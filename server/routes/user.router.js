@@ -5,6 +5,7 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
+const axios = require('axios');
 
 const router = express.Router();
 
@@ -50,5 +51,35 @@ router.post('/logout', (req, res) => {
   req.logout();
   res.sendStatus(200);
 });
+
+// Sticking the newsletter stuff here
+router.put('/mailing-list', (req, res) => {
+  const key = process.env.MAILCHIMP_API;
+  const dc = process.env.MAILCHIMP_DC;
+  const list = process.env.MAILCHIMP_LIST;
+
+  const email = req.body.email;
+
+  axios.put(`https://${dc}.api.mailchimp.com/3.0/lists/${list}/members/${email}`,
+    {
+      email_address: email,
+      status_if_new: "pending"
+    },
+    {
+      auth: {
+        username: "anystring",
+        password: key
+      },
+      headers: {
+        "User-agent": "Request-Promise"
+      }
+    })
+    .then(response => {
+      res.sendStatus(201);
+    }).catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;

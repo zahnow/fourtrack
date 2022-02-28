@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import './LandingPage.css';
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterForm/RegisterForm';
 
 function LandingPage() {
+  const dispatch = useDispatch();
   const [heading, setHeading] = useState('Welcome');
+  const [emailInput, setEmailInput] = useState('');
   const history = useHistory();
 
   const onLogin = (event) => {
     history.push('/login');
   };
+
+  function handleMailingList() {
+    dispatch({type: 'REGISTER_MAILING_LIST', payload: {email: emailInput}});
+  }
 
   return (
     <div className="container">
@@ -42,6 +49,9 @@ function LandingPage() {
             congue.
           </p>
 
+          <h2>Mailing List</h2>
+          <input type='email' value={emailInput} onChange={(e) => {setEmailInput(e.target.value)}} />
+          <button onClick={handleMailingList}>Submit</button>
           <p>
             Fusce porta diam ac tortor elementum, ut imperdiet metus volutpat.
             Suspendisse posuere dapibus maximus. Aliquam vitae felis libero. In
@@ -50,6 +60,8 @@ function LandingPage() {
             non fermentum mauris. Sed in enim ac turpis faucibus pretium in sit
             amet nisi.
           </p>
+
+
         </div>
         <div className="grid-col grid-col_4">
           <RegisterForm />
