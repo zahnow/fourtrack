@@ -6,7 +6,7 @@ import store from './redux/store';
 
 import App from './components/App/App';
 import { ChakraProvider } from '@chakra-ui/react'
-import theme from './chakra/theme.js';
+import theme from './theme/theme.js';
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>

@@ -1,4 +1,3 @@
-import './Nav.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {Box, HStack, Center, Flex, Heading} from '@chakra-ui/react';
