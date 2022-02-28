@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { Avatar, Center, Heading, Button, Grid, GridItem, Text} from '@chakra-ui/react';
 
 function BandList() {
     const history = useHistory();
@@ -7,15 +8,24 @@ function BandList() {
     
     return (
         <div>
-            <h1>Band List</h1>
-            <button onClick={() => history.push('/addband')}>New Band</button>
-            <ul>
+            <Heading>Band List</Heading>
+            <Button colorScheme='green' onClick={() => history.push('/addband')}>New Band</Button>
+            <Grid templateColumns='repeat(3, 1fr)'>
                 {bands.map(band => {
                     return (
-                        <li key={band.id}><Link to={`/bands/${band.id}`}>{band.name}</Link></li>
+                        <GridItem key={band.id} borderWidth='1px' borderRadius='lg' m='lg' >
+                            <Link to={`/bands/${band.id}`}>
+                                <Center>
+                                    <Avatar size='2xl' name={band.name} src={band.band_profile_image_path} />
+                                </Center>
+                                <Center>
+                                    <Text>{band.name}</Text>    
+                                </Center>
+                            </Link>
+                        </GridItem>
                     )
                 })}
-            </ul>
+            </Grid>
         </div>
     )
 }

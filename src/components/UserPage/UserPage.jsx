@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import {Button, Heading} from '@chakra-ui/react';
 import SongList from './SongList';
 import ClipList from './ClipList';
 
@@ -10,10 +11,10 @@ function UserPage() {
 
   return (
     <div className="container">
-      <h2>Welcome, {user.username}!</h2>
-      <button onClick={() => history.push('/add-song')}>Add Song</button>
+      <Heading>Welcome, {user.username}!</Heading>
+      <Button onClick={() => history.push('/add-song')}>Add Song</Button>
       <SongList />
-      <button>Add Clip</button>
+      <Button>Add Clip</Button>
       <ClipList />
     </div>
   );

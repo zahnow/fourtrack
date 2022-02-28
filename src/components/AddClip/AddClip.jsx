@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import {Box, Container, Input, Heading, Button} from '@chakra-ui/react';
 
 
 function AddClip() {
@@ -49,12 +50,12 @@ function AddClip() {
     }
 
     return (
-        <div>
-            <h1>Add Clip</h1>
+        <Container>
+            <Heading>Add Clip</Heading>
             <div>
                 <label htmlFor="clipname">
                     Clip Name:
-                    <input
+                    <Input
                         type="text"
                         name="clipname"
                         value={clipName}
@@ -66,7 +67,7 @@ function AddClip() {
             <div>
                 <label htmlFor="clipdescription">
                     Clip Description:
-                    <input
+                    <Input
                         type="text"
                         name="clipdescription"
                         value={clipDescription}
@@ -76,12 +77,12 @@ function AddClip() {
                 </label>
             </div>
             <div>
-                <button onClick={handleUploadWidget}>Upload Audio Clip</button>
+                <Button onClick={handleUploadWidget}>Upload Audio Clip</Button>
             </div>
             <div>
-                <button onClick={handleAddClip}>Add Clip</button>
+                <Button colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
             </div>
-        </div>
+        </Container>
     );
 }
 

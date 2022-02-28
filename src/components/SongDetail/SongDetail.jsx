@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory, Link } from "react-router-dom";
+import {Avatar, Button, Heading, Input, Textarea} from '@chakra-ui/react';
 
 function SongDetail() {
     const dispatch = useDispatch();
@@ -50,10 +51,10 @@ function SongDetail() {
 
     return (
         <div>
-            <h1>{song?.name}</h1>
-            <h2>Clips</h2>
-            <h3>Add Clip</h3>
-            <button onClick={handleAddClip}>Add Clip</button>
+            <Heading>{song?.name}</Heading>
+            <Heading as='h2'>Clips</Heading>
+            <Heading as='h3' >Add Clip</Heading>
+            <Button onClick={handleAddClip}>Add Clip</Button>
             <ul>
                 {clips.map(clip => {
                     return (
@@ -61,13 +62,13 @@ function SongDetail() {
                     )
                 })}
             </ul>
-            <h2>Comments</h2>
+            <Heading>Comments</Heading>
             <div>
-                <h3>New Comment</h3>
+                <Heading>New Comment</Heading>
                 <div>
                     <label htmlFor="add comment">
                         Message:
-                        <input
+                        <Textarea
                             type="text"
                             name="add comment"
                             value={commentInput}
@@ -76,23 +77,23 @@ function SongDetail() {
                         />
                     </label>
                 </div>
-                <button onClick={handleAddComment}>Send</button>
+                <Button onClick={handleAddComment}>Send</Button>
             </div>
             <div>
                 <ul>
                     {song?.comment?.length > 0 && song?.comment?.map(comment => {
                         return (
-                            <li key={comment.id}>{comment.comment} - {comment.username} 
+                            <li key={comment.id}>{comment.comment} <Avatar src={comment.image_path} /> {comment.username} 
                                 {comment.user_id === user.id && 
-                                    <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>}
+                                    <Button colorScheme='red' size='xs' onClick={() => handleDeleteComment(comment.id)}>Delete</Button>}
                             </li>
                         )
                     })}
                 </ul>
             </div>
             <div>
-                <h2>Delete Song?</h2>
-                <button onClick={handleDeleteSong}>Delete Song</button>
+                <Heading >Delete Song?</Heading>
+                <Button colorScheme='red' onClick={handleDeleteSong}>Delete Song</Button>
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Box, Container, Heading, Button, Input, Select} from '@chakra-ui/react';
 
 function AddSong() {
     const bands = useSelector(store => store.bands);
@@ -16,13 +17,13 @@ function AddSong() {
     }
 
     return (
-        <div>
-            <h1>Add Song</h1>
+        <Container>
+            <Heading>Add Song</Heading>
             <div>
                 <div>
                     <label htmlFor="songname">
                         Song Name:
-                        <input
+                        <Input
                             type="text"
                             name="songname"
                             value={songName}
@@ -34,7 +35,7 @@ function AddSong() {
                 <div>
                     <label htmlFor="songdescription">
                         Song Description:
-                        <input
+                        <Input
                             type="text"
                             name="songdescription"
                             value={songDescription}
@@ -46,20 +47,20 @@ function AddSong() {
                 <div>
                     <label htmlFor="bandselect">
                         Band:
-                        <select name="bandselect" value={bandId} onChange={e => setBandId(e.target.value)}>
+                        <Select name="bandselect" value={bandId} onChange={e => setBandId(e.target.value)}>
                             {bands.map(band => {
                                 return(
                                     <option key={band.id} value={band.id}>{band.name}</option>
                                 )
                             })}
-                        </select>
+                        </Select>
                     </label>
                 </div>
                 <div>
-                    <button onClick={handleAddSong}>Add Song</button>
+                    <Button onClick={handleAddSong}>Add Song</Button>
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }
 

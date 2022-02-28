@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import { Box, Flex, Container, Center, Button, Heading, Avatar, Table, Thead, Tbody, Tr, Th, Td, Input, Text } from '@chakra-ui/react';
 
 function BandDetail() {
     const bands = useSelector(store => store.bands);
@@ -16,6 +17,7 @@ function BandDetail() {
     const [editMode, setEditMode] = useState(false);
     const [editNameInput, setEditNameInput] = useState('');
 
+    // I'm not sending all band members to redux at the moment.
     useEffect(() => {
         axios.get(`/api/band/member/${bandId}`)
             .then(response => {
@@ -28,10 +30,10 @@ function BandDetail() {
 
     function handleAddMember() {
         dispatch({
-            type: 'ADD_BAND_MEMBER', 
+            type: 'ADD_BAND_MEMBER',
             payload: {
-                bandId: bandId, 
-                userId: addUserInput, 
+                bandId: bandId,
+                userId: addUserInput,
                 role: 'member'
             }
         });
@@ -59,50 +61,77 @@ function BandDetail() {
 
     //Add guard for deleted bands
     return (
-        <div>
-            <img src={band?.band_profile_image_path} />
-            <h1>{band?.name}</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+        <Container>
+            <Center>
+                <Avatar
+                    src={band?.band_profile_image_path}
+                    name={band?.name}
+                    size='2xl'
+                />
+            </Center>
+            <Center>
+                <Heading>{band?.name}</Heading>
+            </Center>
+
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th></Th>
+                        <Th>Username</Th>
+                        <Th>Name</Th>
+                        <Th>Role</Th>
+                        <Th></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
                     {members.map(member => {
                         return (
-                            <tr key={member.id}>
-                                <td>{member.username}</td>
-                                <td>{`${member.first_name} ${member.last_name}`}</td>
-                                <td>{member.role}</td>
-                                <td><button onClick={() => handleRemoveMember(member.id)}>Remove</button></td>
-                            </tr>
+                            <Tr key={member.id}>
+                                <Td>
+                                <Avatar
+                                            src={member.user_profile_image_path}
+                                            name={member.username}
+                                            size='sm'
+                                        />
+                                </Td>
+                                <Td>
+                                    <Flex alignItems='center'>
+
+                                        {member.username}
+                                    </Flex>
+                                </Td>
+                                <Td>{`${member.first_name} ${member.last_name}`}</Td>
+                                <Td>{member.role}</Td>
+                                <Td><Button colorScheme='red' onClick={() => handleRemoveMember(member.id)}>Remove</Button></Td>
+                            </Tr>
                         )
                     })}
-                </tbody>
-            </table>
+                </Tbody>
+            </Table>
             <div>
-                <h2>Add Member</h2>
-                <label htmlFor="username">
-                    Username:
-                    <input
+                <Heading>Add Member</Heading>
+                <Flex>
+                    <Text hidden htmlFor="username">
+                        Username:
+                    </Text>
+                    <Input
                         type="text"
                         name="username"
                         value={addUserInput}
                         required
+                        placeholder='Username'
                         onChange={(event) => setAddUserInput(event.target.value)}
                     />
-                </label>
-                <button onClick={handleAddMember}>Add Member</button>
+
+
+                    <Button colorScheme='green' onClick={handleAddMember}>Add Member</Button>
+                </Flex>
             </div>
             <div>
-                <h2>Delete Band</h2>
-                <button onClick={handleDeleteBand}>Delete</button>
+                <Heading>Delete Band</Heading>
+                <Button colorScheme='red' onClick={handleDeleteBand}>Delete</Button>
             </div>
-        </div>
+        </Container>
     );
 }
 

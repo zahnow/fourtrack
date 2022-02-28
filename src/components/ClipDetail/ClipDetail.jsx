@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import {Box, Avatar, Button, Textarea, Heading, Container, List, UnorderedList, ListItem} from '@chakra-ui/react';
 
 function ClipDetail() {
     const dispatch = useDispatch();
@@ -11,6 +12,7 @@ function ClipDetail() {
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
+
 
     function handleAddComment() {
         dispatch({
@@ -45,17 +47,17 @@ function ClipDetail() {
     }
 
     return (
-        <div>
-            <h1>{clip?.name}</h1>
+        <Container >
+            <Heading>{clip?.name}</Heading>
             {/* AUDIO GOES HEREEEEEE */}
                 <audio controls src={clip?.path}/>
-            <h2>Clip Comments</h2>
-            <div>
-                <h3>New Comment</h3>
-                <div>
+            <Heading as='h2' size='lg'>Clip Comments</Heading>
+            <Box>
+                <Heading as='h3' size='md'>New Comment</Heading>
+                <Box>
                     <label htmlFor="add comment">
                         Message:
-                        <input
+                        <Textarea
                             type="text"
                             name="add comment"
                             value={commentInput}
@@ -63,26 +65,26 @@ function ClipDetail() {
                             onChange={(event) => setCommentInput(event.target.value)}
                         />
                     </label>
-                </div>
-                <button onClick={handleAddComment}>Send</button>
-            </div>
-            <div>
-                <ul>
+                </Box>
+                <Button onClick={handleAddComment}>Send</Button>
+            </Box>
+            <Box>
+                <UnorderedList>
                     {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
                         return (
-                            <li key={comment.id}>{comment.comment} - {comment.username}
+                            <ListItem key={comment.id}>{comment.comment} <Avatar src={comment.image_path} /> {comment.username}
                                 {comment.user_id === user.id && 
-                                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>}
-                            </li>
+                                <Button colorScheme='red' size='xs' onClick={() => handleDeleteComment(comment.id)}>Delete</Button>}
+                            </ListItem>
                         )
                     })}
-                </ul>
-            </div>
-            <div>
-                <h2>Delete Clip</h2>
-                <button onClick={handleDeleteClip} >Delete Clip</button>
-            </div>
-        </div>
+                </UnorderedList>
+            </Box>
+            <Box>
+                <Heading as='h2' size='lg'>Delete Clip</Heading>
+                <Button onClick={handleDeleteClip} colorScheme='red' >Delete Clip</Button>
+            </Box>
+        </Container>
     )
 }
 

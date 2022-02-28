@@ -1,17 +1,18 @@
 import './Nav.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {Box, HStack, Center, Flex, Heading} from '@chakra-ui/react';
 
 function Nav() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
   return (
-    <div className="nav">
+    <Flex background='Background'>
       <Link to="/home">
-        <h2 className="nav-title">Fourtrack</h2>
+        <Heading as='h1' size='lg'>Fourtrack</Heading>
       </Link>
-      <div>
+      <HStack ml='auto' px={10}>
         {/* If no user is logged in, show these links */}
         {!user.id && (
           // If there's no user, show login/registration links
@@ -41,8 +42,8 @@ function Nav() {
 
           </>
         )}
-      </div>
-    </div>
+      </HStack>
+    </Flex>
   );
 }
 

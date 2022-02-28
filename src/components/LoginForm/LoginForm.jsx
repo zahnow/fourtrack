@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Box, Button, Input, Heading, Text, Container } from '@chakra-ui/react';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -25,41 +26,45 @@ function LoginForm() {
   }; // end login
 
   return (
-    <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
-      {errors.loginMessage && (
-        <h3 className="alert" role="alert">
-          {errors.loginMessage}
-        </h3>
-      )}
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            required
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
-      </div>
-    </form>
+    <Container>
+
+
+      <form onSubmit={login}>
+        <Heading>Login</Heading>
+        {errors.loginMessage && (
+          <Heading className="alert" role="alert">
+            {errors.loginMessage}
+          </Heading>
+        )}
+        <Box>
+          <label htmlFor="username">
+            Username:
+            <Input
+              type="text"
+              name="username"
+              required
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </label>
+        </Box>
+        <Box>
+          <label htmlFor="password">
+            Password:
+            <Input
+              type="password"
+              name="password"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </label>
+        </Box>
+        <Box>
+          <Button type="submit" name="submit" colorScheme='green'>Log In</Button>
+        </Box>
+      </form>
+    </Container>
   );
 }
 

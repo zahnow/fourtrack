@@ -1,35 +1,36 @@
 import './SongList.css';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import {Container, Button, Table, Thead, Tbody, Tr, Th, Td, Heading} from '@chakra-ui/react';
 
 function SongList() {
     const history = useHistory();
     const songs = useSelector(store => store.songs);
 
     return (
-        <div>
-            <h1>Song List</h1>
-            <button onClick={() => history.push('/add-song')}>Add Song</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Last Updated</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <Container maxW='container.lg'>
+            <Heading>Song List</Heading>
+            <Button onClick={() => history.push('/add-song')}>Add Song</Button>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th>Name</Th>
+                        <Th>Description</Th>
+                        <Th>Last Updated</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
                     {songs.map(song => {
                         return (
-                        <tr key={song.id} className='song-table-row' onClick={() => history.push(`/songs/${song.id}`)}>
-                            <th>{song.name}</th>
-                            <th>{song.description}</th>
-                            <th>{song.updated_at}</th>
-                        </tr>)
+                        <Tr key={song.id} className='song-table-row' onClick={() => history.push(`/songs/${song.id}`)}>
+                            <Td>{song.name}</Td>
+                            <Td>{song.description}</Td>
+                            <Td>{song.updated_at}</Td>
+                        </Tr>)
                     })}
-                </tbody>
-            </table>
-        </div>
+                </Tbody>
+            </Table>
+        </Container>
     )
 }
 

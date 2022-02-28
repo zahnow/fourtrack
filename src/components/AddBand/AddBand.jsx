@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Box, HStack, VStack, Heading, Button, Input, Text, Container } from '@chakra-ui/react';
 
 function AddBand() {
-    const user = useSelector(store =>  store.user);
+    const user = useSelector(store => store.user);
     const [bandName, setBandName] = useState('');
     const [bandImage, setBandImage] = useState('');
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ function AddBand() {
 
     // TODO: REmove user from this dispatch
     function handleAddBand() {
-        dispatch({type: 'CREATE_BAND', payload: {band_name: bandName, band_profile_image_path: bandImage, user_id: user.id}});
+        dispatch({ type: 'CREATE_BAND', payload: { band_name: bandName, band_profile_image_path: bandImage, user_id: user.id } });
         history.push('/bands');
     }
 
@@ -38,30 +39,27 @@ function AddBand() {
     }
 
     return (
-        <div>
-            <h1>Add Band</h1>
-            <div>
-                <div>
-                    <label htmlFor="bandname">
+        <Container maxW='container.lg' py={10}>
+            <Heading>Add Band</Heading>
+            <VStack>
+                <Box>
+                    <Text htmlFor="bandname">
                         Band Name:
-                        <input
+                        <Input
                             type="text"
                             name="bandname"
                             value={bandName}
                             required
                             onChange={(event) => setBandName(event.target.value)}
                         />
-                    </label>
-                </div>
-                <div>
-                    <button onClick={handleImageUpload}>Upload Image</button>
-                </div>
-                <div>
-                    <button onClick={handleAddBand}>Add Band</button>
-                </div>
-            </div>
+                    </Text>
+                </Box>
+                <Button onClick={handleImageUpload}>Upload Image</Button>
+                <Button onClick={handleAddBand}>Add Band</Button>
+            </VStack>
 
-        </div>
+
+        </Container>
     )
 }
 
