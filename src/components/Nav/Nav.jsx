@@ -1,47 +1,52 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import {Box, HStack, Center, Flex, Heading} from '@chakra-ui/react';
+import { Link as ReactLink } from 'react-router-dom';
+import { Link, HStack, Flex, Heading } from '@chakra-ui/react';
 
 function Nav() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
   return (
-    <Flex background='Background'>
-      <Link to="/home">
-        <Heading as='h1' size='lg'>Fourtrack</Heading>
-      </Link>
-      <HStack ml='auto' px={10}>
-        {/* If no user is logged in, show these links */}
-        {!user.id && (
-          // If there's no user, show login/registration links
-          <Link className="navLink" to="/login">
-            Login / Register
-          </Link>
-        )}
+    <Flex px={10} py={4}>
+        <Link 
+          as={ReactLink} 
+          to="/home"
+          _hover={{ textDecor: 'none' }}
+        >
+          <Heading as='h1' size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
+        </Link>
+        <HStack ml='auto'>
 
-        {/* If a user is logged in, show these links */}
-        {user.id && (
-          <>
-            <Link className="navLink" to="/user">
-              Home
+          {/* If no user is logged in, show these links */}
+          {!user.id && (
+            // If there's no user, show login/registration links
+            <Link as={ReactLink} to="/login">
+              Login / Register
             </Link>
+          )}
 
-            <Link className="navLink" to="/songs">
-              Songs
-            </Link>
+          {/* If a user is logged in, show these links */}
+          {user.id && (
+            <>
+              <Link as={ReactLink} to="/user">
+                Home
+              </Link>
 
-            <Link className="navLink" to="/bands">
-              Bands
-            </Link>
+              <Link as={ReactLink} to="/songs">
+                Songs
+              </Link>
 
-            <div className='navLink' onClick={() => dispatch({ type: 'LOGOUT' })}>
-              Log Out
-            </div>
+              <Link as={ReactLink} to="/bands">
+                Bands
+              </Link>
 
-          </>
-        )}
-      </HStack>
+              <Link onClick={() => dispatch({ type: 'LOGOUT' })}>
+                Log Out
+              </Link>
+
+            </>
+          )}
+        </HStack>
     </Flex>
   );
 }

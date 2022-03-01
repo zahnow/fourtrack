@@ -23,9 +23,7 @@ function AddBand() {
         cloudinary.createUploadWidget({
             sources: ['local'],
             multiple: false,
-            clientAllowedFormats: ["png", "jpeg", "jpeg"],
-            // cloudName: 'dihyja7id',
-            // uploadPreset: 'l4d3xwai'
+            clientAllowedFormats: ["png", "jpeg"],
             cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
             uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
         },

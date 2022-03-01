@@ -6,6 +6,7 @@ import {Container, Button, Table, Thead, Tbody, Tr, Th, Td, Heading} from '@chak
 function SongList() {
     const history = useHistory();
     const songs = useSelector(store => store.songs);
+    const bands = useSelector(store => store.bands);
 
     return (
         <Container maxW='container.lg'>
@@ -16,6 +17,7 @@ function SongList() {
                     <Tr>
                         <Th>Name</Th>
                         <Th>Description</Th>
+                        <Th>Band</Th>
                         <Th>Last Updated</Th>
                     </Tr>
                 </Thead>
@@ -25,6 +27,8 @@ function SongList() {
                         <Tr key={song.id} className='song-table-row' onClick={() => history.push(`/songs/${song.id}`)}>
                             <Td>{song.name}</Td>
                             <Td>{song.description}</Td>
+                            <Td>{JSON.stringify(bands)}</Td>
+                            {/* <Td>{bands.find(band => band.id === song.band_id).name}</Td> */}
                             <Td>{song.updated_at}</Td>
                         </Tr>)
                     })}

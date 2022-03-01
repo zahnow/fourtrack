@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import {Box, Avatar, Button, Textarea, Heading, Container, List, UnorderedList, ListItem} from '@chakra-ui/react';
+import CommentCard from '../Comments/CommentCard';
 
 function ClipDetail() {
     const dispatch = useDispatch();
