@@ -17,7 +17,10 @@ import {
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
+    Spacer,
+    Flex
 } from '@chakra-ui/react';
+import { DeleteIcon, AddIcon, SettingsIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,12 +38,16 @@ function SongDetail() {
     const [commentInput, setCommentInput] = useState('');
     const allClips = useSelector(store => store.clips);
     const clips = allClips.filter(clip => Number(clip.song_id) === Number(songId));
-    
-    // Variables for alert popup
+
+    // Variables for song deletion popup
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const dismissAlert = () => setIsAlertOpen(false);
     const cancelRef = useRef();
 
+    // Variables for comment deletion popup
+    const [isCommentAlertOpen, setIsCommentAlertOpen] = useState(false);
+    const dismissCommentAlert = () => setIsCommentAlertOpen(false);
+    const cancelCommentRef = useRef();
 
     dayjs.extend(relativeTime);
 
@@ -68,36 +75,38 @@ function SongDetail() {
         history.push(`/songs/`);
     }
 
+    function handleDeleteComment(commentId) {
+        console.log(commentId)
+        dispatch({
+            type: 'DELETE_SONG_COMMENT',
+            payload: {
+                commentId
+            }
+        })
+    }
+
     return (
         <Center>
-            <Box
-                width='container.xl'
-                bg='blue.200'
-                mt={10}
-                p={10}
-                rounded={10}
-            >
+            <Box layerStyle={'outerContainer'} >
                 <HStack
                     justifyContent='space-between'
                     alignItems='flex-start'
                 >
                     <Box>
-                        <Heading as='h1' size='4xl'>{song?.name}</Heading>
-                        <Text>{song?.description}</Text>
+                        <Text textStyle={'pageHeader'}>{song?.name}</Text>
+                        <Text mt={4}>{song?.description}</Text>
                     </Box>
                     <Box>
                         <IconButton
                             aria-label='Edit Song'
-                            icon={<FontAwesomeIcon icon={faBars} />}
-                            colorScheme='blue'
+                            icon={<SettingsIcon />}
                             variant='outline'
                             rounded='full'
-                            onClick={handleDeleteSong}
                             mr={1}
                         />
                         <IconButton
                             aria-label='Delete Song'
-                            icon={<FontAwesomeIcon icon={faTrashCan} />}
+                            icon={<DeleteIcon />}
                             colorScheme='red'
                             variant='outline'
                             rounded='full'
@@ -105,11 +114,12 @@ function SongDetail() {
                         />
                     </Box>
                 </HStack>
-                <Heading as='h2'>Clips</Heading>
-                <HStack>
-                    <Heading as='h3' >Add Clip</Heading>
-                    <Button onClick={handleAddClip}>Add Clip</Button>
-                </HStack>
+                <Flex>
+                    <Heading as='h2'>Clips</Heading>
+                    <Spacer />
+                    <Button leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
+
+                </Flex>
                 <HStack justify='space-between'>
                     {clips.map(clip => {
                         return (
@@ -139,6 +149,7 @@ function SongDetail() {
                 </VStack>
             </Box>
 
+            {/* Alert for deleting the song */}
             <AlertDialog
                 isOpen={isAlertOpen}
                 leastDestructiveRef={cancelRef}
@@ -147,7 +158,7 @@ function SongDetail() {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Delete Customer
+                            Delete Song?
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
@@ -159,6 +170,34 @@ function SongDetail() {
                                 Cancel
                             </Button>
                             <Button colorScheme='red' onClick={handleDeleteSong} ml={3}>
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+
+            {/* Alert for deleting a comment */}
+            <AlertDialog
+                isOpen={isCommentAlertOpen}
+                leastDestructiveRef={cancelCommentRef}
+                onClose={dismissCommentAlert}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Delete Comment?
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelCommentRef} onClick={dismissCommentAlert}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme='red' onClick={handleDeleteComment} ml={3}>
                                 Delete
                             </Button>
                         </AlertDialogFooter>

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Heading, Box, Text, List, UnorderedList, ListItem, Grid } from '@chakra-ui/react';
+import { Heading, Box, Text, Grid } from '@chakra-ui/react';
 import SongCard from './SongCard';
 
 function SongList() {

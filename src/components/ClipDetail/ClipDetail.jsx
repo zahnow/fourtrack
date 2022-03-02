@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import {Box, Avatar, Button, Textarea, Heading, Container, List, UnorderedList, ListItem} from '@chakra-ui/react';
+import { Box, Flex, Avatar, Button, Textarea, Heading, Center, IconButton, UnorderedList, ListItem, Text, Spacer } from '@chakra-ui/react';
 import CommentCard from '../Comments/CommentCard';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 function ClipDetail() {
     const dispatch = useDispatch();
@@ -48,44 +49,51 @@ function ClipDetail() {
     }
 
     return (
-        <Container >
-            <Heading>{clip?.name}</Heading>
-            {/* AUDIO GOES HEREEEEEE */}
-                <audio controls src={clip?.path}/>
-            <Heading as='h2' size='lg'>Clip Comments</Heading>
-            <Box>
-                <Heading as='h3' size='md'>New Comment</Heading>
-                <Box>
-                    <label htmlFor="add comment">
-                        Message:
-                        <Textarea
-                            type="text"
-                            name="add comment"
-                            value={commentInput}
-                            required
-                            onChange={(event) => setCommentInput(event.target.value)}
-                        />
-                    </label>
-                </Box>
-                <Button onClick={handleAddComment}>Send</Button>
+        <Center>
+            <Box layerStyle='outerContainer'>
+                <Flex>
+                    <Text textStyle='pageHeader'>{clip?.name}</Text>
+                    <Spacer />
+                    <IconButton aria-label='Delete Clip' icon={<DeleteIcon />} onClick={handleDeleteClip} colorScheme='red' variant='ghost' />
+                </Flex>
+                {/* AUDIO GOES HEREEEEEE */}
+                <Center>
+                    <audio controls src={clip?.path} />
+
+                </Center>
+                <Text textStyle='subHeader'>Comments</Text>
+                <Center>
+                    <Box layerStyle='innerContainer'>
+                        <Heading as='h3' size='md'>New Comment</Heading>
+                        <Box>
+                            <Text as='label' htmlFor="add comment">
+                                Message:
+                                <Textarea
+                                    type="text"
+                                    name="add comment"
+                                    value={commentInput}
+                                    required
+                                    onChange={(event) => setCommentInput(event.target.value)}
+                                />
+                            </Text>
+                        </Box>
+                        <Button onClick={handleAddComment}>Send</Button>
+                        <Box>
+                            <UnorderedList>
+                                {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
+                                    return (
+                                        <ListItem key={comment.id} layerStyle='commentContainer'>{comment.comment} <Avatar src={comment.image_path} /> {comment.username}
+                                            {comment.user_id === user.id &&
+                                                <Button colorScheme='red' size='xs' onClick={() => handleDeleteComment(comment.id)}>Delete</Button>}
+                                        </ListItem>
+                                    )
+                                })}
+                            </UnorderedList>
+                        </Box>
+                    </Box>
+                </Center>
             </Box>
-            <Box>
-                <UnorderedList>
-                    {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
-                        return (
-                            <ListItem key={comment.id}>{comment.comment} <Avatar src={comment.image_path} /> {comment.username}
-                                {comment.user_id === user.id && 
-                                <Button colorScheme='red' size='xs' onClick={() => handleDeleteComment(comment.id)}>Delete</Button>}
-                            </ListItem>
-                        )
-                    })}
-                </UnorderedList>
-            </Box>
-            <Box>
-                <Heading as='h2' size='lg'>Delete Clip</Heading>
-                <Button onClick={handleDeleteClip} colorScheme='red' >Delete Clip</Button>
-            </Box>
-        </Container>
+        </Center>
     )
 }
 

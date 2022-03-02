@@ -1,52 +1,69 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link as ReactLink } from 'react-router-dom';
-import { Link, HStack, Flex, Heading } from '@chakra-ui/react';
+import { Link, HStack, Flex, Heading, Menu, MenuButton, MenuList, MenuItem, Button, Spacer } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { useColorMode } from '@chakra-ui/react';
 
 function Nav() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const { colorMode, toggleColorMode } = useColorMode()
 
   return (
     <Flex px={10} py={4}>
-        <Link 
-          as={ReactLink} 
-          to="/home"
-          _hover={{ textDecor: 'none' }}
-        >
-          <Heading as='h1' size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
-        </Link>
-        <HStack ml='auto'>
+      <Link
+        as={ReactLink}
+        to="/home"
+        _hover={{ textDecor: 'none' }}
+      >
+        <Heading as='h1' size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
+      </Link>
+      <Spacer />
+      <HStack>
 
-          {/* If no user is logged in, show these links */}
-          {!user.id && (
-            // If there's no user, show login/registration links
-            <Link as={ReactLink} to="/login">
-              Login / Register
-            </Link>
-          )}
+        {/* If no user is logged in, show these links */}
+        {!user.id && (
+          // If there's no user, show login/registration links
+          <Button as={ReactLink} to="/login">
+            Login / Register
+          </Button>
+        )}
 
-          {/* If a user is logged in, show these links */}
-          {user.id && (
-            <>
-              <Link as={ReactLink} to="/user">
-                Home
-              </Link>
+        {/* If a user is logged in, show these links */}
+        {user.id && (
+          <>
+            <Button as={ReactLink} to="/user" variant='ghost'>
+              Home
+            </Button>
 
-              <Link as={ReactLink} to="/songs">
-                Songs
-              </Link>
+            <Button as={ReactLink} to="/songs" variant='ghost'>
+              Songs
+            </Button>
 
-              <Link as={ReactLink} to="/bands">
-                Bands
-              </Link>
+            <Button as={ReactLink} to="/bands" variant='ghost'>
+              Bands
+            </Button>
 
-              <Link onClick={() => dispatch({ type: 'LOGOUT' })}>
-                Log Out
-              </Link>
+            <Menu>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant='ghost'>
+                {user.first_name} 
+              </MenuButton>
+              <MenuList>
+                <MenuItem>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={toggleColorMode}>
+                  Toggle {colorMode === 'light' ? 'Dark' : 'Light'} Mode
+                </MenuItem>
+                <MenuItem onClick={() => dispatch({ type: 'LOGOUT' })}>
+                  Log Out
+                </MenuItem>
+              </MenuList>
+            </Menu>
 
-            </>
-          )}
-        </HStack>
+          </>
+        )}
+      </HStack>
     </Flex>
   );
 }

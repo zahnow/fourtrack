@@ -14,7 +14,7 @@ function SongCard({song}) {
     dayjs.extend(relativeTime);
 
     return (
-        <Box key={song.id} maxW='md' bg='red'>
+        <Box key={song.id} layerStyle='songCardContainer'>
             <Link to={`/songs/${song.id}`}>
                 <VStack>
                 <Heading fontFamily='Inter'>{song.name}</Heading>
