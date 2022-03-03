@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {Box, Container, Input, Heading, Button} from '@chakra-ui/react';
-
+import { Box, Input, Text, Button, Center, Container } from '@chakra-ui/react';
+import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 function AddClip() {
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function AddClip() {
         //TODO: Add validation
 
         dispatch({
-            type: 'CREATE_CLIP', 
+            type: 'CREATE_CLIP',
             payload: {
                 song_id: songId,
                 path: clipUrl,
@@ -50,39 +50,43 @@ function AddClip() {
     }
 
     return (
-        <Container>
-            <Heading>Add Clip</Heading>
-            <div>
-                <label htmlFor="clipname">
-                    Clip Name:
-                    <Input
-                        type="text"
-                        name="clipname"
-                        value={clipName}
-                        required
-                        onChange={(event) => setClipName(event.target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <label htmlFor="clipdescription">
-                    Clip Description:
-                    <Input
-                        type="text"
-                        name="clipdescription"
-                        value={clipDescription}
-                        required
-                        onChange={(event) => setClipDescription(event.target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <Button onClick={handleUploadWidget}>Upload Audio Clip</Button>
-            </div>
-            <div>
-                <Button colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
-            </div>
-        </Container>
+        <Center>
+            <Box layerStyle='outerContainer'>
+                <Container>
+                    <Text textStyle='pageHeader'>Add Clip</Text>
+                    <Center>
+                        <Button leftIcon={<ArrowUpIcon/>} onClick={handleUploadWidget}>Upload Audio Clip</Button>
+                    </Center>
+                    <Box>
+                        <label htmlFor="clipname">
+                            Clip Name:
+                            <Input
+                                type="text"
+                                name="clipname"
+                                value={clipName}
+                                required
+                                onChange={(event) => setClipName(event.target.value)}
+                            />
+                        </label>
+                    </Box>
+                    <Box>
+                        <label htmlFor="clipdescription">
+                            Clip Description:
+                            <Input
+                                type="text"
+                                name="clipdescription"
+                                value={clipDescription}
+                                required
+                                onChange={(event) => setClipDescription(event.target.value)}
+                            />
+                        </label>
+                    </Box>
+                    <Center my={8}>
+                        <Button colorScheme='green' size='lg' leftIcon={<AddIcon />} onClick={handleAddClip}>Add Clip</Button>
+                    </Center>
+                </Container>
+            </Box>
+        </Center>
     );
 }
 

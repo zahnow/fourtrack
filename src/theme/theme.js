@@ -25,9 +25,10 @@ const theme = extendTheme({
       width: 'container.xl',
       mt: '16px',
       p: '16px',
-      //      border: "2px solid",
-      //      borderColor: "gray.500",
-      rounded: '16px'
+            border: "2px solid",
+            borderColor: "gray.500",
+      rounded: '16px',
+      minHeight: '85vh'
     },
     innerContainer: {
       width: 'container.lg',

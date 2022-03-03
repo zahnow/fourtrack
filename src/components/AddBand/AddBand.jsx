@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, Center, VStack, Heading, Button, Input, Text, Avatar, HStack } from '@chakra-ui/react';
+import { Box, Center, VStack, Container, Button, Input, Text, Avatar, HStack } from '@chakra-ui/react';
 import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 
@@ -47,7 +47,7 @@ function AddBand() {
                     <Avatar src={bandImage} name={bandName} size='2xl' />
                     <Button size='sm' leftIcon={<ArrowUpIcon />} onClick={handleImageUpload}>Upload Image</Button>
                         <Input
-                            maxW='md'
+                            maxW='lg'
                             type="text"
                             name="bandname"
                             placeholder='Band Name'
@@ -55,9 +55,10 @@ function AddBand() {
                             required
                             onChange={(event) => setBandName(event.target.value)}
                         />
-
-                    <Button size='lg' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddBand}>Add Band</Button>
                 </VStack>
+                <Center>
+                    <Button my={8} size='lg' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddBand}>Add Band</Button>
+                </Center>
 
 
             </Box>

@@ -13,10 +13,10 @@ function UserPage() {
   return (
     <Center>
     <Box layerStyle={'outerContainer'}>
-      <Flex>
+      <Flex alignItems='center'>
       <Text textStyle='pageHeader'>Recent Songs</Text>
       <Spacer />
-      <Button leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={() => history.push('/add-song')} >Add Song</Button>
+      <Button leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={() => history.push('/add-song')} >New Song</Button>
       </Flex>
       <SongList />
     </Box>

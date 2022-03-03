@@ -14,7 +14,7 @@ function SongCard({ song }) {
     dayjs.extend(relativeTime);
 
     return (
-        <Box key={song.id} variant='card'>
+        <Box key={song.id} layerStyle='cardContainer'>
             <Link to={`/songs/${song.id}`}>
                 <VStack>
                     <Circle size='2xs' bgGradient='linear(to-tl, #8A2387, #E94057, #F27121)'>

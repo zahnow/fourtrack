@@ -15,12 +15,12 @@ function SongList() {
     return (
         <Center>
             <Box layerStyle={'outerContainer'}>
-                <Flex>
+                <Flex alignItems='center'>
                     <Text textStyle='pageHeader'>All Songs</Text>
                     <Spacer />
                     <Button leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={() => history.push('/add-song')}>New Song</Button>
                 </Flex>
-                <Table>
+                <Table variant='striped' size='lg'>
                     <Thead>
                         <Tr>
                             <Th>Name</Th>
@@ -34,7 +34,7 @@ function SongList() {
                             return (
                                 <Tr key={song.id} className='song-table-row' onClick={() => history.push(`/songs/${song.id}`)}>
                                     <Td>{song.name}</Td>
-                                    <Td>{song.description}</Td>
+                                    <Td maxW='lg' isTruncated>{song.description}</Td>
                                     <Td>{bands?.find(band => Number(band.id) === Number(song.band_id))?.name}</Td>
                                     <Td>{dayjs(song.updated_at).fromNow()}</Td>
                                 </Tr>)
