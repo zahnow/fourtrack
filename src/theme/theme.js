@@ -5,7 +5,7 @@ import { extendTheme, theme as base } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 
 // 2. Add your color mode config
-const theme = extendTheme( {
+const theme = extendTheme({
   config: {
     initialColorMode: 'light',
     useSystemColorMode: true,
@@ -25,8 +25,8 @@ const theme = extendTheme( {
       width: 'container.xl',
       mt: '16px',
       p: '16px',
-      border: "2px solid",
-      borderColor: "gray.500",
+      //      border: "2px solid",
+      //      borderColor: "gray.500",
       rounded: '16px'
     },
     innerContainer: {
@@ -45,12 +45,14 @@ const theme = extendTheme( {
       borderColor: "gray.500",
       rounded: '16px'
     },
-    songCardContainer: {
+    cardContainer: {
       maxW: 'md',
+      maxH: 'xl',
       mt: '16px',
       p: '16px',
-      border: "2px solid",
-      borderColor: "gray.500",
+      pt: '48px',
+      bg: 'gray.500',
+      //color: 'white',
       rounded: '16px'
     },
     selected: {
@@ -63,15 +65,17 @@ const theme = extendTheme( {
     pageHeader: {
       fontFamily: `'Rubik', ${base.fonts.heading}`,
       fontSize: '7xl',
-      color: 'red.500',
+      textAlign: 'center',
+      bgGradient: 'linear(to-tl, #8A2387, #E94057, #F27121)',
+      bgClip: 'text',
+      bgSize: 'cover',
       fontWeight: 'bolder',
       marginTop: '0',
-      lineHeight: '1'
+      //lineHeight: '1'
     },
     subHeader: {
-      fontFamily: `'Rubik', ${base.fonts.heading}`,
+      fontFamily: `'Inter', ${base.fonts.heading}`,
       fontSize: '4xl',
-      color: 'red.500',
       fontWeight: 'bolder'
     }
   },
@@ -83,6 +87,22 @@ const theme = extendTheme( {
           rounded: 'full',
           color: 'gray.500',
         })
+      },
+    },
+    Box: {
+      variants: {
+        card: {
+          baseStyle: ({ colorMode }) => ({
+            bg: colorMode === 'dark' ? 'green.300' : 'green.500',
+            color: colorMode === 'dark' ? 'gray.800' : 'white',
+            textTransform: 'uppercase',
+            fontWeight: 'semibold',
+            letterSpacing: '0.02em',
+            padding: '4px',
+            borderRadius: '2px',
+            fontSize: '12px',
+          })
+        }
       }
     }
   }

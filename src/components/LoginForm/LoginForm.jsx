@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { Box, Button, Input, Heading, Text, Container } from '@chakra-ui/react';
+import { Box, Button, Input, Heading, Text, Center, Container } from '@chakra-ui/react';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -26,11 +26,12 @@ function LoginForm() {
   }; // end login
 
   return (
-    <Container>
+    <>
+    <Text textStyle='pageHeader'>Login</Text>
+    <Center>
 
-
+      <Container>
       <form onSubmit={login}>
-        <Heading>Login</Heading>
         {errors.loginMessage && (
           <Heading className="alert" role="alert">
             {errors.loginMessage}
@@ -60,11 +61,13 @@ function LoginForm() {
             />
           </label>
         </Box>
-        <Box>
-          <Button type="submit" name="submit" colorScheme='green'>Log In</Button>
-        </Box>
+        <Center my={8}>
+          <Button type="submit" size='lg' name="submit" colorScheme='green'>Log In</Button>
+        </Center>
       </form>
-    </Container>
+      </Container>
+    </Center>
+    </>
   );
 }
 

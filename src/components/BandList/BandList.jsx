@@ -11,21 +11,21 @@ function BandList() {
         <Center>
             <Box layerStyle={'outerContainer'} >
                 <Flex>
-                    <Text textStyle={'pageHeader'}>Band List</Text>
+                    <Text textStyle={'pageHeader'}>All Bands</Text>
                     <Spacer />
                     <Button size='lg' leftIcon={<AddIcon />} colorScheme='green' onClick={() => history.push('/addband')}>New Band</Button>
                 </Flex>
-                <Grid templateColumns='repeat(3, 1fr)' gap={4}>
+                <Grid templateColumns='repeat(3, 1fr)' gap={10} mt={10}>
                     {bands.map(band => {
                         return (
-                            <GridItem key={band.id} borderWidth='1px' borderRadius='lg' m='lg' >
+                            <GridItem key={band.id} m='lg' >
                                 <Box>
                                     <Link to={`/bands/${band.id}`}>
                                         <Center>
                                             <Avatar size='2xl' name={band.name} src={band.band_profile_image_path} />
                                         </Center>
                                         <Center>
-                                            <Text>{band.name}</Text>
+                                            <Text fontSize='xl' fontWeight='bold'>{band.name}</Text>
                                         </Center>
                                     </Link>
                                 </Box>

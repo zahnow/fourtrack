@@ -14,7 +14,7 @@ function UserPage() {
     <Center>
     <Box layerStyle={'outerContainer'}>
       <Flex>
-      <Text textStyle='pageHeader'>Welcome, {user.username}!</Text>
+      <Text textStyle='pageHeader'>Recent Songs</Text>
       <Spacer />
       <Button leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={() => history.push('/add-song')} >Add Song</Button>
       </Flex>

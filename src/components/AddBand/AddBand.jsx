@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, HStack, VStack, Heading, Button, Input, Text, Container } from '@chakra-ui/react';
+import { Box, Center, VStack, Heading, Button, Input, Text, Avatar, HStack } from '@chakra-ui/react';
+import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
+
 
 function AddBand() {
     const user = useSelector(store => store.user);
@@ -37,27 +39,29 @@ function AddBand() {
     }
 
     return (
-        <Container maxW='container.lg' py={10}>
-            <Heading>Add Band</Heading>
-            <VStack>
-                <Box>
-                    <Text htmlFor="bandname">
-                        Band Name:
+        <Center>
+
+            <Box layerStyle='outerContainer'>
+                <Text textStyle='pageHeader'>New Band</Text>
+                <VStack>
+                    <Avatar src={bandImage} name={bandName} size='2xl' />
+                    <Button size='sm' leftIcon={<ArrowUpIcon />} onClick={handleImageUpload}>Upload Image</Button>
                         <Input
+                            maxW='md'
                             type="text"
                             name="bandname"
+                            placeholder='Band Name'
                             value={bandName}
                             required
                             onChange={(event) => setBandName(event.target.value)}
                         />
-                    </Text>
-                </Box>
-                <Button onClick={handleImageUpload}>Upload Image</Button>
-                <Button onClick={handleAddBand}>Add Band</Button>
-            </VStack>
+
+                    <Button size='lg' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddBand}>Add Band</Button>
+                </VStack>
 
 
-        </Container>
+            </Box>
+        </Center>
     )
 }
 

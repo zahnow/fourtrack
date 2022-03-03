@@ -1,3 +1,4 @@
+import { Box, Button, Center, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import { useHistory } from 'react-router-dom';
@@ -7,21 +8,23 @@ function RegisterPage() {
   const history = useHistory();
 
   return (
-    <div>
+    <Center>
+    <Box layerStyle='outerContainer'>
+      <Text textStyle='pageHeader'>Sign Up</Text>
       <RegisterForm />
 
-      <center>
-        <button
-          type="button"
-          className="btn btn_asLink"
+      <Center>
+        <Button
+          variant='link'
           onClick={() => {
             history.push('/login');
           }}
-        >
+          >
           Login
-        </button>
-      </center>
-    </div>
+        </Button>
+      </Center>
+    </Box>
+    </Center>
   );
 }
 

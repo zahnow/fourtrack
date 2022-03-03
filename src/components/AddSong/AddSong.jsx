@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, Container, Heading, Button, Input, Select} from '@chakra-ui/react';
+import { Box, Center, Heading, Button, Input, Select} from '@chakra-ui/react';
 
 function AddSong() {
     const bands = useSelector(store => store.bands);
@@ -17,8 +17,9 @@ function AddSong() {
     }
 
     return (
-        <Container>
-            <Heading>Add Song</Heading>
+        <Center>
+        <Box layerStyle='outerContainer'>
+            <Heading>New Song</Heading>
             <div>
                 <div>
                     <label htmlFor="songname">
@@ -60,7 +61,8 @@ function AddSong() {
                     <Button onClick={handleAddSong}>Add Song</Button>
                 </div>
             </div>
-        </Container>
+        </Box>
+        </Center>
     )
 }
 

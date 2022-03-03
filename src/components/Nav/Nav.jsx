@@ -16,7 +16,7 @@ function Nav() {
         to="/home"
         _hover={{ textDecor: 'none' }}
       >
-        <Heading as='h1' size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
+        <Heading size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
       </Link>
       <Spacer />
       <HStack>

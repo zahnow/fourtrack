@@ -8,8 +8,7 @@ function SongList() {
 
     return (
         <Box>
-            <Heading textStyle='pageHeader'>Song List</Heading>
-            <Grid templateColumns='repeat(4, 1fr)' gap={10} >
+            <Grid templateColumns='repeat(3, 1fr)' gap={10} >
                 {songs.map(song => <SongCard key={song.id} song={song} />)}
             </Grid>
         </Box>

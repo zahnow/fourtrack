@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Input, Heading, Button, Typography } from '@chakra-ui/react';
+import { Avatar, Box, Center, Input, Heading, Button, Text, VStack, Container } from '@chakra-ui/react';
 
 function RegisterForm() {
   const [username, setUsername] = useState('');
@@ -51,42 +51,18 @@ function RegisterForm() {
   }
 
   return (
-    <Container>
+    <Box my={8}>
 
-
-      <form onSubmit={registerUser}>
-        <Heading>Register User</Heading>
-        {errors.registrationMessage && (
-          <Heading className="alert" role="alert">
-            {errors.registrationMessage}
-          </Heading>
-        )}
-        <Box>
-          <label htmlFor="username">
-            Username:
-            <Input
-              type="text"
-              name="username"
-              value={username}
-              required
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </label>
-        </Box>
-        <Box>
-          <label htmlFor="password">
-            Password:
-            <Input
-              type="password"
-              name="password"
-              value={password}
-              required
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-        </Box>
-        <Box>
-          <label htmlFor="email">
+      {errors.registrationMessage && (
+        <Heading className="alert" role="alert">
+          {errors.registrationMessage}
+        </Heading>
+      )}
+      <VStack>
+        <Avatar src={imagePath} name={`${firstName} ${lastName}`} size='2xl' />
+        <Button onClick={handleImageUpload}>Add Image</Button>
+        <Container>
+          <Text htmlFor="email">
             Email Address:
             <Input
               type="email"
@@ -95,10 +71,28 @@ function RegisterForm() {
               required
               onChange={(event) => setEmail(event.target.value)}
             />
-          </label>
-        </Box>
-        <Box>
-          <label htmlFor="firstname">
+          </Text>
+          <Text htmlFor="username">
+            Username:
+            <Input
+              type="text"
+              name="username"
+              value={username}
+              required
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </Text>
+          <Text htmlFor="password">
+            Password:
+            <Input
+              type="password"
+              name="password"
+              value={password}
+              required
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Text>
+          <Text htmlFor="firstname">
             First Name:
             <Input
               type="text"
@@ -107,10 +101,8 @@ function RegisterForm() {
               required
               onChange={(event) => setFirstName(event.target.value)}
             />
-          </label>
-        </Box>
-        <Box>
-          <label htmlFor="lastname">
+          </Text>
+          <Text htmlFor="lastname">
             Last Name:
             <Input
               type="text"
@@ -119,16 +111,13 @@ function RegisterForm() {
               required
               onChange={(event) => setLastName(event.target.value)}
             />
-          </label>
-        </Box>
-        <Box>
-          <Button onClick={handleImageUpload}>Add Image</Button>
-        </Box>
-        <Box>
-          <Input className="btn" type="submit" name="submit" value="Register" />
-        </Box>
-      </form>
-    </Container>
+          </Text>
+        </Container>
+      </VStack>
+        <Center mt={8}>
+          <Button onClick={registerUser} name="submit" value="Register" colorScheme='green' size='lg'>Register</Button>
+        </Center>
+    </Box >
   );
 }
 

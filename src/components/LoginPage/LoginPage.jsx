@@ -1,26 +1,28 @@
 import React from 'react';
 import LoginForm from '../LoginForm/LoginForm';
 import { useHistory } from 'react-router-dom';
+import {Box, Center, Button } from '@chakra-ui/react';
 
 function LoginPage() {
   const history = useHistory();
 
   return (
-    <div>
+    <Center>
+    <Box layerStyle='outerContainer'>
       <LoginForm />
 
-      <center>
-        <button
-          type="button"
-          className="btn btn_asLink"
+      <Center>
+        <Button
+          variant='link'
           onClick={() => {
             history.push('/registration');
           }}
         >
           Register
-        </button>
-      </center>
-    </div>
+        </Button>
+      </Center>
+    </Box>
+    </Center>
   );
 }
 
