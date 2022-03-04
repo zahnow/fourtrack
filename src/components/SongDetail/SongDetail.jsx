@@ -133,7 +133,7 @@ function SongDetail() {
                                         {clip.name}
                                     </Td>
                                     <Td>
-                                        {clip.created_at}
+                                        {dayjs(clip.created_at).fromNow()}
                                     </Td>
 
                                 </Tr>
