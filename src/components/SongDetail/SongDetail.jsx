@@ -5,7 +5,6 @@ import {
     Text,
     Center,
     Button,
-    Heading,
     Textarea,
     VStack,
     Box,
@@ -101,7 +100,7 @@ function SongDetail() {
                     </Box>
                     <Menu>
                         <MenuButton as={IconButton}
-                            aria-label='Edit Song'
+                            aria-label='Song Settings'
                             icon={<SettingsIcon />}
                             variant='ghost'
                             mr={1}

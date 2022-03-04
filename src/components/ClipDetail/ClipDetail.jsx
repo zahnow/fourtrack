@@ -1,9 +1,27 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import { Box, Flex, Avatar, Button, Textarea, Heading, Center, IconButton, UnorderedList, ListItem, Text, Spacer } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Avatar,
+    Button,
+    Textarea,
+    Heading,
+    Center,
+    IconButton,
+    Text,
+    Spacer,
+    VStack,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem
+} from '@chakra-ui/react';
 import CommentCard from '../Comments/CommentCard';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon, SettingsIcon } from '@chakra-ui/icons';
+import ClipCommentCard from './ClipCommentCard';
+import GenericDeleteAlert from '../Utilities/GenericDeleteAlert';
 
 function ClipDetail() {
     const dispatch = useDispatch();
@@ -15,6 +33,13 @@ function ClipDetail() {
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
 
+    // Variables for clip deletion popup
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const dismissAlert = () => setIsAlertOpen(false);
+
+    // Variables for comment deletion popup
+    const [isCommentAlertOpen, setIsCommentAlertOpen] = useState(false);
+    const dismissCommentAlert = () => setIsCommentAlertOpen(false);
 
     function handleAddComment() {
         dispatch({
@@ -54,45 +79,89 @@ function ClipDetail() {
                 <Flex>
                     <Text textStyle='pageHeader'>{clip?.name}</Text>
                     <Spacer />
-                    <IconButton aria-label='Delete Clip' icon={<DeleteIcon />} onClick={handleDeleteClip} colorScheme='red' variant='ghost' />
+                    <Menu>
+                        <MenuButton as={IconButton}
+                            aria-label='Clip Setttings'
+                            icon={<SettingsIcon />}
+                            variant='ghost'
+                        />
+
+                        <MenuList>
+                            <MenuItem onClick={() => setIsAlertOpen(true)} >Delete Clip</MenuItem>
+                        </MenuList>
+                    </Menu>
                 </Flex>
                 {/* AUDIO GOES HEREEEEEE */}
-                <Center>
-                    <audio controls src={clip?.path} />
+                <Box>
+                    <Center>
+                        <audio style={{ width: '50%' }} controls src={clip?.path} />
 
-                </Center>
-                <Text textStyle='subHeader'>Comments</Text>
-                <Center>
-                    <Box layerStyle='innerContainer'>
-                        <Heading as='h3' size='md'>New Comment</Heading>
-                        <Box>
-                            <Text as='label' htmlFor="add comment">
+                    </Center>
+                    <Center>
+                        <Text textStyle='subHeader'>Comments</Text>
+                    </Center>
+                    <Center>
+                        <VStack width='container.md'>
+                            <Text as='label' htmlFor="new comment">
                                 Message:
                                 <Textarea
                                     type="text"
-                                    name="add comment"
+                                    name="new comment"
+                                    width='container.md'
+                                    bg='gray.700'
+                                    border="2px solid"
+                                    borderColor="gray.500"
+                                    mb={2}
+                                    rounded='16px'
+                                    fontWeight='bold'
+                                    resize='none'
+                                    color="white"
                                     value={commentInput}
                                     required
                                     onChange={(event) => setCommentInput(event.target.value)}
                                 />
                             </Text>
-                        </Box>
-                        <Button onClick={handleAddComment}>Send</Button>
-                        <Box>
-                            <UnorderedList>
-                                {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
-                                    return (
-                                        <ListItem key={comment.id} layerStyle='commentContainer'>{comment.comment} <Avatar src={comment.image_path} /> {comment.username}
-                                            {comment.user_id === user.id &&
-                                                <Button colorScheme='red' size='xs' onClick={() => handleDeleteComment(comment.id)}>Delete</Button>}
-                                        </ListItem>
-                                    )
-                                })}
-                            </UnorderedList>
-                        </Box>
-                    </Box>
-                </Center>
+                            <Flex>
+                                <Spacer />
+                                <Button
+                                    ml='auto'
+                                    onClick={handleAddComment}
+                                    colorScheme='green'
+                                    >Send</Button>
+
+                            </Flex>
+                            {/* Comment List */}
+                            <Box>
+                                <VStack>
+                                    {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
+                                        return (
+                                            <ClipCommentCard key={comment.id} comment={comment} />
+                                        )
+                                    })}
+                                </VStack>
+                            </Box>
+                        </VStack>
+                    </Center>
+                </Box>
             </Box>
+
+            {/* Alert for deleting the song */}
+            <GenericDeleteAlert 
+                isOpen={isAlertOpen} 
+                onClose={dismissAlert} 
+                header={"Delete Clip?"} 
+                body={"Are you sure? You can't undo this action afterwards."} 
+                deleteFunction={handleDeleteClip} 
+            />
+
+            {/* Alert for deleting a comment */}
+            <GenericDeleteAlert 
+                isOpen={isCommentAlertOpen} 
+                onClose={dismissCommentAlert} 
+                header={"Delete Comment?"} 
+                body={"Are you sure? You can't undo this action afterwards."} 
+                deleteFunction={handleDeleteComment} 
+            />
         </Center>
     )
 }

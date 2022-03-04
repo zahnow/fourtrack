@@ -2,15 +2,12 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './LandingPage.css';
-import { Box, Heading, Text, Button, Input, Flex } from '@chakra-ui/react';
-
-// CUSTOM COMPONENTS
-import RegisterForm from '../RegisterForm/RegisterForm';
+import { Box, Heading, Text, Button, Input, Flex, Center, Container, VStack, Image } from '@chakra-ui/react';
 
 function LandingPage() {
   const dispatch = useDispatch();
-  const [heading, setHeading] = useState('Welcome');
   const [emailInput, setEmailInput] = useState('');
+  const [addedToMailingList, setAddedToMailingList] = useState(false);
   const history = useHistory();
 
   const onLogin = (event) => {
@@ -18,15 +15,40 @@ function LandingPage() {
   };
 
   function handleMailingList() {
-    dispatch({type: 'REGISTER_MAILING_LIST', payload: {email: emailInput}});
+    setEmailInput('');
+    setAddedToMailingList(true);
+    dispatch({ type: 'REGISTER_MAILING_LIST', payload: { email: emailInput } });
   }
 
   return (
     <Box className="container">
-      <Heading>{heading}</Heading>
+      {/* Photo by <a href="https://unsplash.com/@john_matychuk?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">John Matychuk</a> on <a href="https://unsplash.com/s/photos/band?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a> */}
+      <Center>
+        <Center pos='relative' >
+          <Image
+            src='/images/splashimage.jpg'
+            filter='blur(5px) grayscale(25%) brightness(70%)'
+            height='auto'
+            maxH='100vh'
+            minW='100vw'
+            alt='Photo by <a href="https://unsplash.com/@john_matychuk?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">John Matychuk</a> on <a href="https://unsplash.com/s/photos/band?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>'
+          />
+          <VStack pos='absolute'>
+            <Box>
+              <Text textStyle='pageHeader'>Finish More Songs</Text>
 
-      <div className="grid">
-        <div className="grid-col grid-col_8">
+            </Box>
+            <Box>
+              <Text textStyle='subHeader' color='white'>Collaboration Tools For Musicians</Text>
+
+            </Box>
+          </VStack>
+        </Center>
+      </Center>
+
+      <Flex mt={8}>
+        <Container>
+          <Text textStyle='subHeader'>Here's some info</Text>
           <Text>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
             id felis metus. Vestibulum et pulvinar tortor. Morbi pharetra lacus
@@ -37,46 +59,37 @@ function LandingPage() {
             interdum justo facilisis. Sed pulvinar nulla ac dignissim efficitur.
             Quisque eget eros metus. Vestibulum bibendum fringilla nibh a
             luctus. Duis a sapien metus.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Quam, doloremque?
+            Veritatis ipsam in odio illum natus modi iste qui accusamus, laboriosam,
+            repellat consequuntur impedit optio distinctio quasi quam veniam expedita magnam vel,
+            cum accusantium deleniti.
+            Nisi aspernatur doloribus officia laborum velit voluptates aperiam dolor ullam illum quisquam!
+            Quis, ea voluptas?
           </Text>
+        </Container>
 
-          <Text>
-            Praesent consectetur orci dui, id elementum eros facilisis id. Sed
-            id dolor in augue porttitor faucibus eget sit amet ante. Nunc
-            consectetur placerat pharetra. Aenean gravida ex ut erat commodo, ut
-            finibus metus facilisis. Nullam eget lectus non urna rhoncus
-            accumsan quis id massa. Curabitur sit amet dolor nisl. Proin
-            euismod, augue at condimentum rhoncus, massa lorem semper lacus, sed
-            lobortis augue mi vel felis. Duis ultrices sapien at est convallis
-            congue.
-          </Text>
-
+        <Container>
           <Heading>Mailing List</Heading>
-          <Flex>
-          <Input type='email' value={emailInput} onChange={(e) => {setEmailInput(e.target.value)}} />
-          <Button onClick={handleMailingList}>Submit</Button>
-          </Flex>
-          <Text>
-            Fusce porta diam ac tortor elementum, ut imperdiet metus volutpat.
-            Suspendisse posuere dapibus maximus. Aliquam vitae felis libero. In
-            vehicula sapien at semper ultrices. Vivamus sed feugiat libero. Sed
-            sagittis neque id diam euismod, ut egestas felis ultricies. Nullam
-            non fermentum mauris. Sed in enim ac turpis faucibus pretium in sit
-            amet nisi.
-          </Text>
+          {addedToMailingList ?
+            <Text>
+              Thank you for joining the mailing list!
+            </Text> :
+            <>
+              <Text>
+                If you're interested receiving an invitation to our early access program, sign up for our mailing list!
+              </Text>
+              <Center mt={8}>
+                <Input maxWidth='sm' type='email' value={emailInput} mr={4} onChange={(e) => { setEmailInput(e.target.value) }} />
+                <Button colorScheme='green' onClick={handleMailingList}>Submit</Button>
+              </Center>
+            </>
+          }
+
+        </Container>
 
 
-        </div>
-        <div className="grid-col grid-col_4">
-          <RegisterForm />
-
-          <center>
-            <h4>Already a Member?</h4>
-            <button className="btn btn_sizeSm" onClick={onLogin}>
-              Login
-            </button>
-          </center>
-        </div>
-      </div>
+      </Flex>
     </Box>
   );
 }

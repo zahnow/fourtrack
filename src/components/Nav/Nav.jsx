@@ -24,7 +24,7 @@ function Nav() {
         {/* If no user is logged in, show these links */}
         {!user.id && (
           // If there's no user, show login/registration links
-          <Button as={ReactLink} to="/login">
+          <Button as={ReactLink} variant='ghost' to="/login">
             Login / Register
           </Button>
         )}

@@ -45,6 +45,7 @@ const theme = extendTheme({
       border: "2px solid",
       borderColor: "gray.500",
       bg: "gray.700",
+      color: "white",
       rounded: '16px'
     },
     cardContainer: {
