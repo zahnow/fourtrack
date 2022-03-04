@@ -25,8 +25,8 @@ const theme = extendTheme({
       width: 'container.xl',
       mt: '16px',
       p: '16px',
-            border: "2px solid",
-            borderColor: "gray.500",
+            // border: "2px solid",
+            // borderColor: "gray.500",
       rounded: '16px',
       minHeight: '85vh'
     },
@@ -44,6 +44,7 @@ const theme = extendTheme({
       p: '16px',
       border: "2px solid",
       borderColor: "gray.500",
+      bg: "gray.700",
       rounded: '16px'
     },
     cardContainer: {
@@ -52,8 +53,8 @@ const theme = extendTheme({
       mt: '16px',
       p: '16px',
       pt: '48px',
-      bg: 'gray.500',
-      //color: 'white',
+      bg: 'gray.700',
+      color: 'white',
       rounded: '16px'
     },
     selected: {

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link as ReactLink } from 'react-router-dom';
-import { Link, HStack, Flex, Heading, Menu, MenuButton, MenuList, MenuItem, Button, Spacer } from '@chakra-ui/react';
+import { Link, Box, Flex, Heading, Menu, MenuButton, MenuList, MenuItem, Button, Spacer } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useColorMode } from '@chakra-ui/react';
 
@@ -19,7 +19,7 @@ function Nav() {
         <Heading size='2xl' fontWeight='extrabold' >FOURTRACK</Heading>
       </Link>
       <Spacer />
-      <HStack>
+      <Box>
 
         {/* If no user is logged in, show these links */}
         {!user.id && (
@@ -63,7 +63,7 @@ function Nav() {
 
           </>
         )}
-      </HStack>
+      </Box>
     </Flex>
   );
 }

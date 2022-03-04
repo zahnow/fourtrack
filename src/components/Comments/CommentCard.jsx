@@ -2,8 +2,7 @@ import {Box, Flex, HStack, VStack, Text, Avatar, IconButton, Container} from '@c
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {useSelector} from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faBars } from "@fortawesome/free-solid-svg-icons";
+import { DeleteIcon } from '@chakra-ui/icons';
 
 
 function CommentCard({comment, deleteFunction}) {
@@ -11,32 +10,25 @@ function CommentCard({comment, deleteFunction}) {
     const user = useSelector(store => store.user);
 
     return (
-        <Box 
-            width='container.md' 
-            outline={2} 
-            bg='gray.200' 
-            rounded={10}
-            p={4}
-        >
+        <Box layerStyle='commentContainer'>
             <Flex>
                 <VStack>
                     <Avatar size='xl' src={comment.image_path} />
                 </VStack>
                 <Container>
                     <HStack>
-                        <Text fontWeight='extrabold'>{comment.username}</Text> 
-                        <Text>{dayjs(comment.created_at).fromNow()}</Text>
+                        <Text fontSize='lg' fontWeight='extrabold'>{comment.username}</Text> 
+                        <Text fontSize='sm'>{dayjs(comment.created_at).fromNow()}</Text>
                     </HStack>
                     <Text>{comment.comment}</Text>
                 </Container>
-                <Box ml='auto'>
+                <Box ml='auto' alignSelf='flex-end'>
                     {comment.user_id === user.id &&
                         <IconButton 
-                        icon={ <FontAwesomeIcon icon={faTrashCan} />} 
+                        icon={ <DeleteIcon />} 
                         colorScheme='red' 
                         size='sm' 
-                        variant='outline'
-                        rounded='full'
+                        variant='ghost'
                         onClick={() => deleteFunction(comment.id)} />}
 
                 </Box>

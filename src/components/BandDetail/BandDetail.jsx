@@ -6,32 +6,21 @@ import {
     Box,
     Flex,
     Center,
-    Button,
     HStack,
     Avatar,
+    Text,
     Table,
     Thead,
     Tbody,
     Tr,
     Th,
     Td,
-    Input,
-    Text,
     VStack,
     IconButton,
     Menu,
     MenuButton,
     MenuList,
     MenuItem,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    FormControl,
-    FormLabel,
     useDisclosure
 } from '@chakra-ui/react';
 import { SettingsIcon, DeleteIcon } from '@chakra-ui/icons';
@@ -56,7 +45,7 @@ function BandDetail() {
     const [isUserDeleteAlertOpen, setIsUserDeleteAlertOpen] = useState(false);
     const dismissUserDeleteAlert = () => setIsUserDeleteAlertOpen(false);
 
-    // Add Member setup
+    // Add Member setup - might need to change if we allow editing band
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     // I'm not sending all band members to redux at the moment.
