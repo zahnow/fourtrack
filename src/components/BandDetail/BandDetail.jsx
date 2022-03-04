@@ -60,7 +60,6 @@ function BandDetail() {
     });
 
     function handleAddMember(userId) {
-        setAddUserInput('');
         onClose();
         dispatch({
             type: 'ADD_BAND_MEMBER',
