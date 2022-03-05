@@ -27,7 +27,7 @@ function BandList() {
                                         <Center>
                                             <AvatarGroup max={4} my={4}>
                                                 {band.members.map(member => {
-                                                    return (<Avatar src={member.user_profile_image_path} />)
+                                                    return (<Avatar key={member.username} src={member.user_profile_image_path} />)
                                                 })}
                                             </AvatarGroup>
                                         </Center>

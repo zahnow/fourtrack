@@ -46,6 +46,7 @@ function ClipDetail() {
     dayjs.extend(duration); // make our song duration pretty
     const [isPlaying, setIsPlaying] = useState(false);
     const [clipDuration, setClipDuration]  = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
 
     // Variables for clip deletion popup
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -92,11 +93,18 @@ function ClipDetail() {
                 });
 
                 wavesurferRef.current.on("pause", () => {
-                    console.log('playing audio');
+                    console.log('pausing audio');
                     setIsPlaying(false);
                 });
 
+                wavesurferRef.current.on('seek', (progress) => {
+                    console.log('seeking: ', progress);
+                });
 
+                wavesurferRef.current.on('audioprocess', () => {
+                    //console.log(wavesurferRef.current.getCurrentTime());
+                    setCurrentTime(wavesurferRef.current.getCurrentTime());
+                });
 
                 if (window) {
                     window.surferidze = wavesurferRef.current;
@@ -176,11 +184,11 @@ function ClipDetail() {
                             <WaveForm 
                                 id="waveform" 
                                 barHeight='.5' 
-                                barWidth='1' 
-                                barGap='2' 
                                 progressColor={linGrad}
-                                cursorColor='gray.700'
+                                cursorColor='gray.700'  //TODO: Respect dark/light mode on this
                                 cursorWidth='2'
+                                // barGap='2' // Adds a gap. If you're into that.
+                                // barWidth='1' 
                             >
                             </WaveForm>
                         </WaveSurfer>
@@ -191,7 +199,7 @@ function ClipDetail() {
                         { isPlaying ?
                         <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
                         <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
-                        <Text>Song Length: {dayjs.duration(clipDuration, 'seconds').format('mm:ss')}</Text>
+                        <Text as={Button} fontFamily='monospace' fontSize='lg'>{dayjs.duration(currentTime, 'seconds').format('m:ss')} / {dayjs.duration(clipDuration, 'seconds').format('m:ss')}</Text>
                     </Center>
                             
                     {/* COMMENTS */}
