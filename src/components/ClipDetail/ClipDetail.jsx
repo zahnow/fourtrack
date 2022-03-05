@@ -20,8 +20,13 @@ import {
     HStack
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import ClipCommentCard from './ClipCommentCard';
 import GenericDeleteAlert from '../Utilities/GenericDeleteAlert';
+
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 // Wavesurfer imports
 import { WaveSurfer, WaveForm } from "wavesurfer-react";
@@ -36,6 +41,11 @@ function ClipDetail() {
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
+    
+    // audio player state
+    dayjs.extend(duration); // make our song duration pretty
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [clipDuration, setClipDuration]  = useState(0);
 
     // Variables for clip deletion popup
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -66,16 +76,27 @@ function ClipDetail() {
         waveSurfer => {
             wavesurferRef.current = waveSurfer;
             if (wavesurferRef.current) {
-                //wavesurferRef.current.load(`https://res.cloudinary.com/dihyja7id/video/upload/v1646407801/cgoryv723oacxbiiz81a.mp3`);
-                //wavesurferRef.current.load(`clip?.path`);
 
                 wavesurferRef.current.on("ready", () => {
                     console.log("WaveSurfer is ready");
+                    setClipDuration(wavesurferRef.current.getDuration());
                 });
 
                 wavesurferRef.current.on("loading", data => {
                     console.log("loading --> ", data);
                 });
+
+                wavesurferRef.current.on("play", ()=> {
+                    console.log('playing audio');
+                    setIsPlaying(true);
+                });
+
+                wavesurferRef.current.on("pause", () => {
+                    console.log('playing audio');
+                    setIsPlaying(false);
+                });
+
+
 
                 if (window) {
                     window.surferidze = wavesurferRef.current;
@@ -158,15 +179,22 @@ function ClipDetail() {
                                 barWidth='1' 
                                 barGap='2' 
                                 progressColor={linGrad}
+                                cursorColor='gray.700'
+                                cursorWidth='2'
                             >
                             </WaveForm>
                         </WaveSurfer>
                     </Box>
 
+                    {/* AUDIO CONTROLS */}
                     <Center mb={8}>
-                        <Button colorScheme='blue' onClick={play}>Play / Pause</Button>
-                        {/* <audio style={{ width: '50%' }} controls src={clip?.path} /> */}
+                        { isPlaying ?
+                        <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
+                        <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
+                        <Text>Song Length: {dayjs.duration(clipDuration, 'seconds').format('mm:ss')}</Text>
                     </Center>
+                            
+                    {/* COMMENTS */}
                     <Center>
                         <Text textStyle='subHeader'>Comments</Text>
                     </Center>
