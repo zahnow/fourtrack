@@ -9,10 +9,27 @@ const {
 router.get('/', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const queryString = `
-    SELECT  "band"."id", "band"."band_profile_image_path", "band"."name", "user_band"."role" FROM "band"
+    SELECT 
+  	  "band"."id", 
+  	  "band"."name", 
+  	  "band"."created_at",
+  	  "band"."updated_at",
+  	  "band"."band_profile_image_path",
+  	  (SELECT "user_band"."role" FROM "user_band" WHERE "user_band"."user_id" = $1 AND "user_band"."band_id" = "band"."id") as "role",
+  	  JSONB_AGG( 
+  	  	JSONB_BUILD_OBJECT(
+  	  		'username', "user"."username", 
+  	  		'first_name', "user"."first_name", 
+  	  		'last_name', "user"."last_name", 
+  	  		'user_profile_image_path', "user"."user_profile_image_path",
+  	  		'role', "user_band"."role"
+  	  	)
+  	  ) AS "members" 
+    FROM "band"
     JOIN "user_band" ON "band"."id" = "user_band"."band_id"
     JOIN "user" ON "user_band"."user_id" = "user"."id"
-    WHERE "user"."id" = $1 AND "band"."archived_at" is null;`
+    WHERE "band"."archived_at" IS NULL AND "band"."id" = ANY (SELECT "band_id" FROM "user_band" WHERE "user_band"."user_id" = $1) 
+    GROUP BY "band"."id";`
 
   pool.query(queryString, [userId])
     .then(response => {

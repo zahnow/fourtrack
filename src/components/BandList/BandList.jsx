@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { Avatar, Box, Center, Flex, Heading, Button, Grid, GridItem, Text, Spacer } from '@chakra-ui/react';
+import { Avatar, Box, Center, Flex, Heading, Button, Grid, GridItem, Text, Spacer, AvatarGroup } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 
 function BandList() {
@@ -23,6 +23,13 @@ function BandList() {
                                     <Link to={`/bands/${band.id}`}>
                                         <Center>
                                             <Avatar size='2xl' name={band.name} src={band.band_profile_image_path} />
+                                        </Center>
+                                        <Center>
+                                            <AvatarGroup max={4} my={4}>
+                                                {band.members.map(member => {
+                                                    return (<Avatar src={member.user_profile_image_path} />)
+                                                })}
+                                            </AvatarGroup>
                                         </Center>
                                         <Center>
                                             <Text textStyle='subHeader'>{band.name}</Text>
