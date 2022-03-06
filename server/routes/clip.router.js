@@ -20,7 +20,8 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     	"clip"."path", 
     	"clip"."updated_at", 
     	"clip"."created_at",
-    	COALESCE(
+        (SELECT EXISTS (SELECT "id" FROM "clip_favorite" WHERE "user_id" = $1 AND "clip_id"="clip"."id")) as "is_favorite",
+        COALESCE(
     		JSONB_AGG(
     			DISTINCT JSONB_BUILD_OBJECT(
     			'id', "clip_comment"."id",
@@ -185,6 +186,42 @@ router.delete('/comment/:id', rejectUnauthenticated, (req, res) => {
             console.log('error updating comment:', error);
             res.sendStatus(500);
         })
+})
+
+///////////////////
+// FAVORITES
+///////////////////
+router.post('/favorite/:clipId', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
+    const clipId = req.params.clipId;
+    const queryString = `
+        INSERT INTO "clip_favorite" ("user_id", "clip_id")
+        VALUES ($1, $2);`;
+    pool.query(queryString, [userId, clipId])
+        .then(response => {
+            res.sendStatus(201);
+        })
+        .catch(error => {
+            console.log('error favoriting clip:', error);
+            res.sendStatus(500);
+        });
+})
+
+router.delete('/favorite/:clipId', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
+    const clipId = req.params.clipId;
+    const queryString = `
+        DELETE FROM "clip_favorite"
+        WHERE "user_id" = $1 AND "clip_id" = $2;`;
+
+    pool.query(queryString, [userId, clipId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error removing favorite clip:', error);
+            res.sendStatus(500);
+        });
 })
 
 module.exports = router;

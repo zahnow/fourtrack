@@ -245,4 +245,5 @@ router.delete('/favorite/:songId', rejectUnauthenticated, (req, res) => {
             res.sendStatus(500);
         });
 })
+
 module.exports = router;

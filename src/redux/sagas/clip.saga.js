@@ -63,12 +63,34 @@ function* deleteClipComment(action) {
     }
 }
 
+function* addClipToFavorites(action) {
+    try {
+        const clipId = action.payload.clipId;
+        yield axios.post(`/api/clip/favorite/${clipId}`);
+        yield put({type: 'FETCH_CLIP'}); 
+    } catch (error) {
+        console.warn('Failed to add favorite', error);
+    }
+}
+
+function* removeClipFromFavorites(action) {
+    try {
+        const clipId = action.payload.clipId;
+        yield axios.delete(`/api/clip/favorite/${clipId}`);
+        yield put({type: 'FETCH_CLIP'}); 
+    } catch (error) {
+        console.warn('Failed to remove favorite', error);
+    }
+}
+
 function* clipSaga() {
     yield takeLatest('FETCH_CLIP', fetchClip);
     yield takeLatest('ADD_CLIP_COMMENT', addClipComment);
     yield takeLatest('CREATE_CLIP', createClip);
     yield takeLatest('DELETE_CLIP', deleteClip);
     yield takeLatest('DELETE_CLIP_COMMENT', deleteClipComment);
+    yield takeLatest('ADD_CLIP_TO_FAVORITES', addClipToFavorites);
+    yield takeLatest('REMOVE_CLIP_FROM_FAVORITES', removeClipFromFavorites);
 }
 
 export default clipSaga;

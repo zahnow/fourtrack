@@ -22,7 +22,8 @@ import {
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPause, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as emptyHeart } from '@fortawesome/free-regular-svg-icons';
 import ClipCommentCard from './ClipCommentCard';
 import GenericDeleteAlert from '../Utilities/GenericDeleteAlert';
 
@@ -42,11 +43,11 @@ function ClipDetail() {
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const [commentInput, setCommentInput] = useState('');
-    
+
     // audio player state
     dayjs.extend(duration); // make our song duration pretty
     const [isPlaying, setIsPlaying] = useState(false);
-    const [clipDuration, setClipDuration]  = useState(0);
+    const [clipDuration, setClipDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
 
     // Variables for clip deletion popup
@@ -57,9 +58,18 @@ function ClipDetail() {
     const [isCommentAlertOpen, setIsCommentAlertOpen] = useState(false);
     const dismissCommentAlert = () => setIsCommentAlertOpen(false);
 
+    // Favorites
+    function handleAddFavoriteClip(clipId) {
+        dispatch({ type: "ADD_CLIP_TO_FAVORITES", payload: { clipId } });
+    }
+
+    function handleRemoveFavoriteClip(clipId) {
+        dispatch({ type: "REMOVE_CLIP_FROM_FAVORITES", payload: { clipId } });
+    }
+
     // Wavesurfer
     let linGrad = document.createElement('canvas').getContext('2d').createLinearGradient(0, 0, 1000, 128);
-    linGrad.addColorStop(0, '#F27121'); 
+    linGrad.addColorStop(0, '#F27121');
     linGrad.addColorStop(0.5, '#E94057');
     linGrad.addColorStop(1, '#8A2387');
 
@@ -88,7 +98,7 @@ function ClipDetail() {
                     console.log("loading --> ", data);
                 });
 
-                wavesurferRef.current.on("play", ()=> {
+                wavesurferRef.current.on("play", () => {
                     console.log('playing audio');
                     setIsPlaying(true);
                 });
@@ -157,6 +167,23 @@ function ClipDetail() {
                 <Flex>
                     <Text textStyle='pageHeader'>{clip?.name}</Text>
                     <Spacer />
+                    {clip?.is_favorite ?
+                        <IconButton variant='ghost' onClick={
+                            (event) => {
+                                event.stopPropagation();
+                                handleRemoveFavoriteClip(clip.id);
+                            }
+                        }>
+                            <FontAwesomeIcon icon={faHeart} />
+                        </IconButton> :
+                        <IconButton variant='ghost' onClick={
+                            (event) => {
+                                event.stopPropagation();
+                                handleAddFavoriteClip(clip.id);
+                            }
+                        }>
+                            <FontAwesomeIcon icon={emptyHeart} />
+                        </IconButton>}
                     <Menu>
                         <MenuButton as={IconButton}
                             aria-label='Clip Setttings'
@@ -171,25 +198,25 @@ function ClipDetail() {
                 </Flex>
                 {/* AUDIO GOES HEREEEEEE */}
                 <Box>
-                    <Box 
-                        maxW='3xl' 
-                        ml='auto' 
-                        mr='auto' 
-                        border='2px' 
-                        borderColor='gray.500' 
+                    <Box
+                        maxW='3xl'
+                        ml='auto'
+                        mr='auto'
+                        border='2px'
+                        borderColor='gray.500'
                         borderRadius='16px'
                         overflow='hidden'
                         mb={4}
                     >
                         <WaveSurfer onMount={handleWSMount}>
-                            <WaveForm 
-                                id="waveform" 
-                                barHeight='.5' 
+                            <WaveForm
+                                id="waveform"
+                                barHeight='.5'
                                 progressColor={linGrad}
                                 cursorColor='gray.700'  //TODO: Respect dark/light mode on this
                                 cursorWidth='2'
-                                // barGap='2' // Adds a gap. If you're into that.
-                                // barWidth='1' 
+                            // barGap='2' // Adds a gap. If you're into that.
+                            // barWidth='1' 
                             >
                             </WaveForm>
                         </WaveSurfer>
@@ -197,12 +224,12 @@ function ClipDetail() {
 
                     {/* AUDIO CONTROLS */}
                     <Center mb={8}>
-                        { isPlaying ?
-                        <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
-                        <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
+                        {isPlaying ?
+                            <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
+                            <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
                         <Text as={Button} fontFamily='monospace' fontSize='lg'>{dayjs.duration(currentTime, 'seconds').format('m:ss')} / {dayjs.duration(clipDuration, 'seconds').format('m:ss')}</Text>
                     </Center>
-                            
+
                     {/* COMMENTS */}
                     <Center>
                         <Text textStyle='subHeader'>Comments</Text>

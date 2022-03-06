@@ -71,7 +71,6 @@ function* updateSong(action) {
 }
 
 function* addSongToFavorites(action) {
-    console.log('in add favorites');
     try {
         const songId = action.payload.songId;
         yield axios.post(`/api/song/favorite/${songId}`);

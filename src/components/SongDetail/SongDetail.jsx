@@ -99,6 +99,14 @@ function SongDetail() {
         dispatch({ type: "REMOVE_SONG_FROM_FAVORITES", payload: { songId } });
     }
 
+    function handleAddFavoriteClip(clipId) {
+        dispatch({ type: "ADD_CLIP_TO_FAVORITES", payload: { clipId } });
+    }
+
+    function handleRemoveFavoriteClip(clipId) {
+        dispatch({ type: "REMOVE_CLIP_FROM_FAVORITES", payload: { clipId } });
+    }
+
     return (
         <Center>
             <Box layerStyle={'outerContainer'} >
@@ -145,6 +153,7 @@ function SongDetail() {
                                 <Tr>
                                     <Th>Clip Name</Th>
                                     <Th>Created At</Th>
+                                    <Th></Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -157,7 +166,25 @@ function SongDetail() {
                                             <Td>
                                                 {dayjs(clip.created_at).fromNow()}
                                             </Td>
-
+                                            <Td>
+                                                {clip.is_favorite ?
+                                                    <IconButton variant='ghost' onClick={
+                                                        (event) => {
+                                                            event.stopPropagation();
+                                                            handleRemoveFavoriteClip(clip.id);
+                                                        }
+                                                    }>
+                                                        <FontAwesomeIcon icon={faHeart} />
+                                                    </IconButton> :
+                                                    <IconButton variant='ghost' onClick={
+                                                        (event) => {
+                                                            event.stopPropagation();
+                                                            handleAddFavoriteClip(clip.id);
+                                                        }
+                                                    }>
+                                                        <FontAwesomeIcon icon={emptyHeart} />
+                                                    </IconButton>}
+                                            </Td>
                                         </Tr>
                                     )
                                 })}
