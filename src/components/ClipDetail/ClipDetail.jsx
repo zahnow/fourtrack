@@ -17,6 +17,7 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
+    Stack,
     HStack
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
@@ -238,13 +239,13 @@ function ClipDetail() {
                             </Flex>
                             {/* Comment List */}
                             <Box>
-                                <VStack>
+                                <Stack direction='column-reverse'>
                                     {clip?.comment?.length > 0 && clip?.comment?.map(comment => {
                                         return (
                                             <ClipCommentCard key={comment.id} comment={comment} />
                                         )
                                     })}
-                                </VStack>
+                                </Stack>
                             </Box>
                         </VStack>
                     </Center>

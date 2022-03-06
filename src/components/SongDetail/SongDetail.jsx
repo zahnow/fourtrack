@@ -17,6 +17,7 @@ import {
     MenuList,
     MenuItem,
     useDisclosure,
+    Stack,
     Table,
     Thead,
     Tbody,
@@ -113,40 +114,40 @@ function SongDetail() {
                 <Center>
                     <Text as='h2' textStyle='subHeader'>Clips</Text>
                 </Center>
-                { clips?.length > 0 ? 
-                <>
-                <Flex>
-                    <Button ml='auto' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
-                </Flex>
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <Th>Clip Name</Th>
-                            <Th>Created At</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {clips.map(clip => {
-                            return (
-                                <Tr key={clip.id} onClick={() => history.push(`/clips/${clip.id}`)}>
-                                    <Td>
-                                        {clip.name}
-                                    </Td>
-                                    <Td>
-                                        {dayjs(clip.created_at).fromNow()}
-                                    </Td>
-
+                {clips?.length > 0 ?
+                    <>
+                        <Flex>
+                            <Button ml='auto' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
+                        </Flex>
+                        <Table>
+                            <Thead>
+                                <Tr>
+                                    <Th>Clip Name</Th>
+                                    <Th>Created At</Th>
                                 </Tr>
-                            )
-                        })}
-                    </Tbody>
-                </Table>
-                </>
-                : 
-                <VStack>
-                    <Text>No clips yet!</Text>
-                    <Button leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
-                </VStack>
+                            </Thead>
+                            <Tbody>
+                                {clips.map(clip => {
+                                    return (
+                                        <Tr key={clip.id} onClick={() => history.push(`/clips/${clip.id}`)}>
+                                            <Td>
+                                                {clip.name}
+                                            </Td>
+                                            <Td>
+                                                {dayjs(clip.created_at).fromNow()}
+                                            </Td>
+
+                                        </Tr>
+                                    )
+                                })}
+                            </Tbody>
+                        </Table>
+                    </>
+                    :
+                    <VStack>
+                        <Text>No clips yet!</Text>
+                        <Button leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
+                    </VStack>
                 }
                 <Center>
                     <Box width='container.md'>
@@ -179,12 +180,14 @@ function SongDetail() {
                         </Flex>
                     </Box>
                 </Center>
-                <VStack>
-                    {song?.comment?.length > 0 ?
-                        song?.comment?.map(comment => <SongCommentCard key={comment.id} comment={comment} />) :
-                        <Text mt={16}>No comments yet!</Text>
-                    }
-                </VStack>
+                <Center mt={4}>
+                    <Stack direction='column-reverse'>
+                        {song?.comment?.length > 0 ?
+                            song?.comment?.map(comment => <SongCommentCard key={comment.id} comment={comment} />) :
+                            <Text mt={16}>No comments yet!</Text>
+                        }
+                    </Stack>
+                </Center>
             </Box>
 
             {/* Alert for deleting the song */}
