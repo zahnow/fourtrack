@@ -18,7 +18,9 @@ import {
     MenuList,
     MenuItem,
     Stack,
-    HStack
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,6 +44,8 @@ function ClipDetail() {
     const user = useSelector(store => store.user);
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
+    const songs = useSelector(store => store.songs);
+    const song = songs.find(song => Number(clip.song_id) === Number(song.id) );
     const [commentInput, setCommentInput] = useState('');
 
     // audio player state
@@ -165,7 +169,17 @@ function ClipDetail() {
         <Center>
             <Box layerStyle='outerContainer'>
                 <Flex>
-                    <Text textStyle='pageHeader'>{clip?.name}</Text>
+                <Breadcrumb>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#/songs'> Songs</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`#/songs/${song.id}`} isCurrentPage> {song?.name}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`#/clips/${clipId}`} isCurrentPage> {clip?.name}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                     <Spacer />
                     {clip?.is_favorite ?
                         <IconButton variant='ghost' onClick={
@@ -196,6 +210,7 @@ function ClipDetail() {
                         </MenuList>
                     </Menu>
                 </Flex>
+                <Text textStyle='pageHeader'>{clip?.name}</Text>
                 {/* AUDIO GOES HEREEEEEE */}
                 <Box>
                     <Box

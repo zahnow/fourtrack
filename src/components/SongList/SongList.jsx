@@ -1,7 +1,7 @@
 import './SongList.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, Text, Button, Flex, Center, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack, Spacer, IconButton, LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Box, Text, Button, Flex, Center, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack, Spacer, IconButton, LinkBox, LinkOverlay, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -27,11 +27,16 @@ function SongList() {
     return (
         <Center>
             <Box layerStyle={'outerContainer'}>
-                <Flex alignItems='center'>
-                    <Text textStyle='pageHeader'>All Songs</Text>
+                <Flex alignItems='flex-start'>
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#/songs' isCurrentPage> Songs</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                     <Spacer />
                     <Button leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={() => history.push('/add-song')}>New Song</Button>
                 </Flex>
+                    <Text textStyle='pageHeader'>All Songs</Text>
                 <Table variant='striped' size='lg'>
                     <Thead>
                         <Tr>

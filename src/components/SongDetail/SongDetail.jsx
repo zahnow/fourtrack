@@ -23,7 +23,10 @@ import {
     Tbody,
     Tr,
     Th,
-    Td
+    Td,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink
 } from '@chakra-ui/react';
 import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -114,10 +117,14 @@ function SongDetail() {
                     justifyContent='space-between'
                     alignItems='flex-start'
                 >
-                    <Box>
-                        <Text textStyle={'pageHeader'}>{song?.name}</Text>
-                        <Text mt={4}>{song?.description}</Text>
-                    </Box>
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#/songs'> Songs</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`#/songs/${songId}`} isCurrentPage> {song?.name}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                     <HStack>
                         {song?.is_favorite ?
                             <IconButton variant='ghost' onClick={() => handleRemoveFavorite(song.id)}>
@@ -140,6 +147,10 @@ function SongDetail() {
                     </HStack>
 
                 </HStack>
+                <Box>
+                    <Text textStyle={'pageHeader'}>{song?.name}</Text>
+                    <Text mt={4}>{song?.description}</Text>
+                </Box>
                 <Center>
                     <Text as='h2' textStyle='subHeader'>Clips</Text>
                 </Center>

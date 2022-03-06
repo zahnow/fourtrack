@@ -21,7 +21,11 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
-    useDisclosure
+    useDisclosure,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    Spacer
 } from '@chakra-ui/react';
 import { SettingsIcon, DeleteIcon } from '@chakra-ui/icons';
 import GenericDeleteAlert from '../Utilities/GenericDeleteAlert';
@@ -97,13 +101,15 @@ function BandDetail() {
         <Center>
             <Box layerStyle='outerContainer'>
                 <Flex>
-                    {/* <Avatar
-                    mx='auto'
-                    src={band?.band_profile_image_path}
-                    name={band?.name}
-                    size='2xl'
-                    /> */}
-                    <Text mx='auto' textStyle='pageHeader'>{band?.name}</Text>
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#/bands'>Bands</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`#/bands/${bandId}`} isCurrentPage>{band?.name}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                    <Spacer />
                     <Menu>
                         <MenuButton as={IconButton} variant='ghost' icon={<SettingsIcon />} />
                         <MenuList>
@@ -112,6 +118,7 @@ function BandDetail() {
                         </MenuList>
                     </Menu>
                 </Flex>
+                <Text mx='auto' textStyle='pageHeader'>{band?.name}</Text>
 
 
                 <VStack>
@@ -164,27 +171,27 @@ function BandDetail() {
             </Box>
 
             {/* Alert for deleting the song */}
-            <GenericDeleteAlert 
-                isOpen={isAlertOpen} 
-                onClose={dismissAlert} 
-                header={'Delete Band?'} 
-                body={"Are you sure? You can't undo this action afterwards."} 
-                deleteFunction={handleDeleteBand} 
+            <GenericDeleteAlert
+                isOpen={isAlertOpen}
+                onClose={dismissAlert}
+                header={'Delete Band?'}
+                body={"Are you sure? You can't undo this action afterwards."}
+                deleteFunction={handleDeleteBand}
             />
 
             {/* Alert for removing a member */}
-            <GenericDeleteAlert 
-                isOpen={isUserDeleteAlertOpen} 
-                onClose={dismissUserDeleteAlert} 
-                header={'Remove Member?'} 
-                body={"Are you sure?"} 
-                deleteFunction={handleRemoveMember} 
+            <GenericDeleteAlert
+                isOpen={isUserDeleteAlertOpen}
+                onClose={dismissUserDeleteAlert}
+                header={'Remove Member?'}
+                body={"Are you sure?"}
+                deleteFunction={handleRemoveMember}
             />
 
             {/* Modal for adding a user */}
-            <GenericModalInput 
-                isOpen={isOpen} 
-                onClose={onClose} 
+            <GenericModalInput
+                isOpen={isOpen}
+                onClose={onClose}
                 header={'Add Member'}
                 label={'Username'}
                 buttonText={'Add'}

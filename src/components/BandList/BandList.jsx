@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { Avatar, Box, Center, Flex, Heading, Button, Grid, GridItem, Text, Spacer, AvatarGroup } from '@chakra-ui/react';
+import { Avatar, Box, Center, Flex, Heading, Button, Grid, GridItem, Text, Spacer, AvatarGroup, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 
 function BandList() {
@@ -10,11 +10,16 @@ function BandList() {
     return (
         <Center>
             <Box layerStyle={'outerContainer'} >
-                <Flex alignItems='center'>
-                    <Text textStyle={'pageHeader'}>All Bands</Text>
+                <Flex alignItems='flex-start'>
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href='#/bands' isCurrentPage>Bands</BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                     <Spacer />
                     <Button size='lg' leftIcon={<AddIcon />} colorScheme='green' onClick={() => history.push('/addband')}>New Band</Button>
                 </Flex>
+                <Text textStyle={'pageHeader'}>All Bands</Text>
                 <Grid templateColumns='repeat(3, 1fr)' gap={10} mt={10}>
                     {bands.map(band => {
                         return (
