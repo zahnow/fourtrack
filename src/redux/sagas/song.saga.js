@@ -70,6 +70,27 @@ function* updateSong(action) {
     }
 }
 
+function* addSongToFavorites(action) {
+    console.log('in add favorites');
+    try {
+        const songId = action.payload.songId;
+        yield axios.post(`/api/song/favorite/${songId}`);
+        yield put({type: 'FETCH_SONG'}); 
+    } catch (error) {
+        console.warn('Failed to add favorite', error);
+    }
+}
+
+function * removeSongFromFavorites(action) {
+    try {
+        const songId = action.payload.songId;
+        yield axios.delete(`/api/song/favorite/${songId}`);
+        yield put({type: 'FETCH_SONG'}); 
+    } catch (error) {
+        console.warn('Failed to remove favorite', error);
+    }
+}
+
 function* songSaga() {
     yield takeLatest('FETCH_SONG', fetchSong);
     yield takeLatest('CREATE_SONG', createSong)
@@ -77,6 +98,8 @@ function* songSaga() {
     yield takeLatest('UPDATE_SONG', updateSong);
     yield takeLatest('DELETE_SONG', deleteSong);
     yield takeLatest('DELETE_SONG_COMMENT', deleteSongComment);
+    yield takeLatest('ADD_SONG_TO_FAVORITES', addSongToFavorites);
+    yield takeLatest('REMOVE_SONG_FROM_FAVORITES', removeSongFromFavorites);
 }
 
 export default songSaga;

@@ -17,6 +17,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     	    "song"."updated_at", 
     	    "song"."archived_at", 
     	    "song"."description", 
+            (SELECT EXISTS (SELECT "id" FROM "song_favorite" WHERE "user_id" = 1 AND "song_id"="song"."id")) as "is_favorite",
     	    COALESCE(
     		    JSONB_AGG(
     			    DISTINCT JSONB_BUILD_OBJECT(
@@ -209,4 +210,39 @@ router.delete('/comment/:id', rejectUnauthenticated, (req, res) => {
         })
 })
 
+///////////////////
+// FAVORITES
+///////////////////
+router.post('/favorite/:songId', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
+    const songId = req.params.songId;
+    const queryString = `
+        INSERT INTO "song_favorite" ("user_id", "song_id")
+        VALUES ($1, $2);`;
+    pool.query(queryString, [userId, songId])
+        .then(response => {
+            res.sendStatus(201);
+        })
+        .catch(error => {
+            console.log('error favoriting song:', error);
+            res.sendStatus(500);
+        });
+})
+
+router.delete('/favorite/:songId', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
+    const songId = req.params.songId;
+    const queryString = `
+        DELETE FROM "song_favorite"
+        WHERE "user_id" = $1 AND "song_id" = $2;`;
+
+    pool.query(queryString, [userId, songId])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('error removing favorite song:', error);
+            res.sendStatus(500);
+        });
+})
 module.exports = router;

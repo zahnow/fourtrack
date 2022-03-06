@@ -25,7 +25,10 @@ import {
     Th,
     Td
 } from '@chakra-ui/react';
-import { DeleteIcon, AddIcon, SettingsIcon } from "@chakra-ui/icons";
+import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as emptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -88,6 +91,14 @@ function SongDetail() {
         })
     }
 
+    function handleAddFavorite(songId) {
+        dispatch({ type: "ADD_SONG_TO_FAVORITES", payload: { songId } });
+    }
+
+    function handleRemoveFavorite(songId) {
+        dispatch({ type: "REMOVE_SONG_FROM_FAVORITES", payload: { songId } });
+    }
+
     return (
         <Center>
             <Box layerStyle={'outerContainer'} >
@@ -99,17 +110,27 @@ function SongDetail() {
                         <Text textStyle={'pageHeader'}>{song?.name}</Text>
                         <Text mt={4}>{song?.description}</Text>
                     </Box>
-                    <Menu>
-                        <MenuButton as={IconButton}
-                            aria-label='Song Settings'
-                            icon={<SettingsIcon />}
-                            variant='ghost'
-                            mr={1}
-                        />
-                        <MenuList>
-                            <MenuItem onClick={() => setIsAlertOpen(true)} >Delete Song</MenuItem>
-                        </MenuList>
-                    </Menu>
+                    <HStack>
+                        {song?.is_favorite ?
+                            <IconButton variant='ghost' onClick={() => handleRemoveFavorite(song.id)}>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </IconButton> :
+                            <IconButton variant='ghost' onClick={() => handleAddFavorite(song.id)}>
+                                <FontAwesomeIcon icon={emptyHeart} />
+                            </IconButton>}
+                        <Menu>
+                            <MenuButton as={IconButton}
+                                aria-label='Song Settings'
+                                icon={<SettingsIcon />}
+                                variant='ghost'
+                                mr={1}
+                            />
+                            <MenuList>
+                                <MenuItem onClick={() => setIsAlertOpen(true)} >Delete Song</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </HStack>
+
                 </HStack>
                 <Center>
                     <Text as='h2' textStyle='subHeader'>Clips</Text>
