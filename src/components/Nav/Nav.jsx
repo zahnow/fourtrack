@@ -49,9 +49,9 @@ function Nav() {
                 {user.first_name} 
               </MenuButton>
               <MenuList>
-                <MenuItem>
+                {/* <MenuItem>
                   Profile
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={toggleColorMode}>
                   Toggle {colorMode === 'light' ? 'Dark' : 'Light'} Mode
                 </MenuItem>

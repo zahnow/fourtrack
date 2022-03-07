@@ -52,6 +52,13 @@ function AddClip() {
                 if (!error && result && result.event === "success") {
                     console.log('Done! Here is the image info: ', result.info);
                     setClipUrl(result.info.secure_url);
+                    toast({
+                        title: 'Audio uploaded!',
+                        description: `You can replace this audio clip by clicking "Replace Audio Clip."`,
+                        status: 'success',
+                        duration: 6000,
+                        isClosable: true,
+                    })
                 }
             }
         ).open();
@@ -63,7 +70,13 @@ function AddClip() {
                 <Container>
                     <Text textStyle='pageHeader'>Add Clip</Text>
                     <Center>
+                        { clipUrl ? 
+                        <>
+                        <Button leftIcon={<ArrowUpIcon/>} onClick={handleUploadWidget} colorScheme='green'>Replace Audio Clip</Button>
+                        </>
+                        :
                         <Button leftIcon={<ArrowUpIcon/>} onClick={handleUploadWidget}>Upload Audio Clip</Button>
+                    }
                     </Center>
                     <Box>
                         <label htmlFor="clipname">
