@@ -40,7 +40,6 @@ const theme = extendTheme({
     },
     commentContainer: {
       width: 'container.md',
-      mt: '16px',
       p: '16px',
       border: "2px solid",
       borderColor: "gray.500",

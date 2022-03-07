@@ -33,6 +33,7 @@ import {
     FormLabel,
     Input,
     useToast,
+    HStack,
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -302,7 +303,7 @@ function ClipDetail() {
                         <Text textStyle='subHeader'>Comments</Text>
                     </Center>
                     <Center>
-                        <VStack width='container.md'>
+                        <Box width='container.md'>
                             <Text as='label' htmlFor="new comment">
                                 Message:
                                 <Textarea
@@ -331,6 +332,7 @@ function ClipDetail() {
                                 >Send</Button>
 
                             </Flex>
+
                             {/* Comment List */}
                             <Box>
                                 <Stack direction='column-reverse'>
@@ -341,7 +343,7 @@ function ClipDetail() {
                                     })}
                                 </Stack>
                             </Box>
-                        </VStack>
+                        </Box>
                     </Center>
                 </Box>
             </Box>
