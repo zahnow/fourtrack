@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
+const { default: axios } = require('axios');
 
 // Return all bands the user is a member of.
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -121,17 +122,33 @@ router.get('/member/:bandId', rejectUnauthenticated, (req, res) => {
 router.post('/member/:bandId', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id; // TODO: validate user has rights to add users
   const bandId = req.params.bandId;
-  const newUserId = req.body.user_id;
+  const newUsername = req.body.username;
   const role = req.body.role; //TODO: Validate this is member or admin.
-  const queryString = `
+  const addMemberQueryString = `
     INSERT INTO "user_band" ("user_id", "band_id", "role")
     VALUES ($1, $2, $3);`;
-  pool.query(queryString, [newUserId ,bandId, role])
+  const memberLookupQueryString = `
+    SELECT * FROM "user" 
+    WHERE "username" = $1;`;
+
+  pool.query(memberLookupQueryString, [newUsername])
     .then(response => {
-      res.sendStatus(201);
+      if(response.rowCount === 0) {
+        res.sendStatus(404);
+        return;
+      }
+      const newUserId = response.rows[0].id;
+      pool.query(addMemberQueryString, [newUserId ,bandId, role])
+      .then(response => {
+        res.sendStatus(201);
+      })
+      .catch(error => {
+        console.warn('Error adding band member:', error);
+        res.sendStatus(500);
+      })
     })
     .catch(error => {
-      console.warn('Error adding band member:', error);
+      console.warn('Error finding user:', error);
       res.sendStatus(500);
     })
 });

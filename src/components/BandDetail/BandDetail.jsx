@@ -63,13 +63,13 @@ function BandDetail() {
             });
     });
 
-    function handleAddMember(userId) {
+    function handleAddMember(userName) {
         onClose();
         dispatch({
             type: 'ADD_BAND_MEMBER',
             payload: {
                 bandId: bandId,
-                userId: userId,
+                userName: userName,
                 role: 'member'
             }
         });

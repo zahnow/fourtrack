@@ -17,7 +17,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     	    "song"."updated_at", 
     	    "song"."archived_at", 
     	    "song"."description", 
-            (SELECT EXISTS (SELECT "id" FROM "song_favorite" WHERE "user_id" = 1 AND "song_id"="song"."id")) as "is_favorite",
+            (SELECT EXISTS (SELECT "id" FROM "song_favorite" WHERE "user_id" = $1 AND "song_id"="song"."id")) as "is_favorite",
     	    COALESCE(
     		    JSONB_AGG(
     			    DISTINCT JSONB_BUILD_OBJECT(

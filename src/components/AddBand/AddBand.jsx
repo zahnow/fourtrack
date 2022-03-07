@@ -23,7 +23,7 @@ function AddBand() {
             duration: 6000,
             isClosable: true,
         })
-        dispatch({ type: 'CREATE_BAND', payload: { band_name: bandName, band_profile_image_path: bandImage, user_id: user.id } });
+        dispatch({ type: 'CREATE_BAND', payload: { band_name: bandName, band_profile_image_path: bandImage, username: user.username } });
         history.push('/bands');
     }
 

@@ -16,17 +16,18 @@ function* createBand(action) {
         console.log('create band', action.payload);
         const band_name = action.payload.band_name;
         const band_profile_image_path = action.payload.band_profile_image_path;
-        const user_id = action.payload.user_id;
+        const username = action.payload.username;
         const response = yield axios.post('/api/band', {band_name, band_profile_image_path});
         yield put({
             type: 'ADD_BAND_MEMBER', 
             payload: {
                 bandId: response.data.id,
-                userId: user_id,
+                userName: username,
                 role: 'admin'
             }
         });
-    } catch (error) {
+        yield put({type: 'FETCH_BAND'});
+        } catch (error) {
         console.warn(error);
     }
 }
@@ -34,12 +35,12 @@ function* createBand(action) {
 function* addMember(action) {
     try {
         console.log("add member:", action.payload);
+        const username = action.payload.userName;
         const bandId = action.payload.bandId;
-        const userId = action.payload.userId;
         const role = action.payload.role;
         yield axios.post(`/api/band/member/${bandId}`, 
             {
-                user_id: userId,
+                username: username,
                 role: role
             })
         yield put({type: 'FETCH_BAND'});
