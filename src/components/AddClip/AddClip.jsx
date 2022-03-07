@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Box, Input, Text, Button, Center, Container } from '@chakra-ui/react';
+import { Box, Input, Text, Button, Center, Container, useToast } from '@chakra-ui/react';
 import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 function AddClip() {
     const dispatch = useDispatch();
     const history = useHistory();
+    const toast = useToast();
     const [clipName, setClipName] = useState('');
     const [clipUrl, setClipUrl] = useState('');
     const [clipDescription, setClipDescription] = useState('');
@@ -16,6 +17,13 @@ function AddClip() {
     function handleAddClip() {
         //TODO: Add validation
 
+        toast({
+            title: 'Clip created.',
+            description: `${clipName} has been created.`,
+            status: 'success',
+            duration: 6000,
+            isClosable: true,
+        })
         dispatch({
             type: 'CREATE_CLIP',
             payload: {

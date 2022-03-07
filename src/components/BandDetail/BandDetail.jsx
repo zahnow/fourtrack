@@ -123,8 +123,9 @@ function BandDetail() {
 
                 <VStack>
                 </VStack>
-
-                <Table>
+                <VStack>
+                <Text textStyle='subHeader'>Members</Text>
+                <Table maxW='container.md'>
                     <Thead>
                         <Tr>
                             <Th>Username</Th>
@@ -168,6 +169,7 @@ function BandDetail() {
                         })}
                     </Tbody>
                 </Table>
+                </VStack>
             </Box>
 
             {/* Alert for deleting the song */}

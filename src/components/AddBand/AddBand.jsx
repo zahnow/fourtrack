@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, Center, VStack, Container, Button, Input, Text, Avatar, HStack } from '@chakra-ui/react';
+import { Box, Center, VStack, Container, Button, Input, Text, Avatar, useToast } from '@chakra-ui/react';
 import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 
@@ -12,9 +12,17 @@ function AddBand() {
     const [bandImage, setBandImage] = useState('');
     const dispatch = useDispatch();
     const history = useHistory();
+    const toast = useToast();
 
     // TODO: REmove user from this dispatch
     function handleAddBand() {
+        toast({
+            title: 'Band created.',
+            description: `${bandName} has been created. You can access it from the song list.`,
+            status: 'success',
+            duration: 6000,
+            isClosable: true,
+        })
         dispatch({ type: 'CREATE_BAND', payload: { band_name: bandName, band_profile_image_path: bandImage, user_id: user.id } });
         history.push('/bands');
     }

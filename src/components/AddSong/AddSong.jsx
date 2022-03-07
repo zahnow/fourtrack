@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Box, Center, Text, Button, Input, Select, Container} from '@chakra-ui/react';
+import { Box, Center, Text, Button, Input, Select, Container, useToast} from '@chakra-ui/react';
 
 function AddSong() {
     const bands = useSelector(store => store.bands);
@@ -10,8 +10,16 @@ function AddSong() {
     const [bandId, setBandId] = useState(bands[0]?.id);
     const dispatch = useDispatch();
     const history = useHistory();
+    const toast = useToast();
 
     function handleAddSong() {
+        toast({
+            title: 'Song created.',
+            description: `${songName} has been created.`,
+            status: 'success',
+            duration: 6000,
+            isClosable: true,
+        })
         dispatch({type: 'CREATE_SONG', payload: {bandId, songName, songDescription}});
         history.push('/songs');
     }
