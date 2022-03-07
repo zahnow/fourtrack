@@ -32,7 +32,7 @@ import {
     FormControl,
     FormLabel,
     Input,
-    useToast
+    useToast,
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -285,12 +285,17 @@ function ClipDetail() {
                     </Box>
 
                     {/* AUDIO CONTROLS */}
-                    <Center mb={8}>
-                        {isPlaying ?
-                            <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
-                            <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
-                        <Text as={Button} fontFamily='monospace' fontSize='lg'>{dayjs.duration(currentTime, 'seconds').format('m:ss')} / {dayjs.duration(clipDuration, 'seconds').format('m:ss')}</Text>
-                    </Center>
+                    <VStack>
+
+                        <Flex justifyContent='space-between' width='container.sm' mb={8}>
+                            <Text fontFamily='monospace' fontWeight='black' fontSize='lg'>{dayjs.duration(currentTime, 'seconds').format('m:ss')}</Text>
+                            {isPlaying ?
+                                <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPause} />} colorScheme='blue' onClick={play} /> :
+                                <IconButton size='lg' variant='outline' icon={<FontAwesomeIcon icon={faPlay} />} colorScheme='blue' onClick={play} />}
+                            <Text fontFamily='monospace'fontWeight='black' fontSize='lg'>{dayjs.duration(clipDuration, 'seconds').format('m:ss')}</Text>
+                        </Flex>
+                    </VStack>
+
 
                     {/* COMMENTS */}
                     <Center>
