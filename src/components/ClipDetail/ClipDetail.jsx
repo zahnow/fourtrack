@@ -20,7 +20,19 @@ import {
     Stack,
     Breadcrumb,
     BreadcrumbItem,
-    BreadcrumbLink
+    BreadcrumbLink,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    FormControl,
+    FormLabel,
+    Input,
+    useToast
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,7 +57,7 @@ function ClipDetail() {
     const clips = useSelector(store => store.clips);
     const clip = clips.find(clip => Number(clip.id) === Number(clipId));
     const songs = useSelector(store => store.songs);
-    const song = songs.find(song => Number(clip.song_id) === Number(song.id) );
+    const song = songs.find(song => Number(clip?.song_id) === Number(song?.id));
     const [commentInput, setCommentInput] = useState('');
 
     // audio player state
@@ -62,6 +74,14 @@ function ClipDetail() {
     const [isCommentAlertOpen, setIsCommentAlertOpen] = useState(false);
     const dismissCommentAlert = () => setIsCommentAlertOpen(false);
 
+    // Variables for copying clip modal
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [nameInput, setNameInput] = useState('');
+    const [descInput, setDescInput] = useState('');
+
+    //Toast
+    const toast = useToast()
+
     // Favorites
     function handleAddFavoriteClip(clipId) {
         dispatch({ type: "ADD_CLIP_TO_FAVORITES", payload: { clipId } });
@@ -69,6 +89,32 @@ function ClipDetail() {
 
     function handleRemoveFavoriteClip(clipId) {
         dispatch({ type: "REMOVE_CLIP_FROM_FAVORITES", payload: { clipId } });
+    }
+
+    // Clip Copy
+    function handleCopyToNewSong() {
+        onClose();
+        dispatch({
+            type: "COPY_CLIP_TO_NEW_SONG",
+            payload: {
+                songName: nameInput,
+                songDescription: descInput,
+                bandId: song?.band_id,
+                clipName: clip.name,
+                clipPath: clip.path,
+                clipDescription: clip.description
+            }
+        });
+        toast({
+            title: 'Song created.',
+            description: `${nameInput} has been created. You can access it from the song list.`,
+            status: 'success',
+            duration: 6000,
+            isClosable: true,
+        })
+        setNameInput('');
+        setDescInput('');
+
     }
 
     // Wavesurfer
@@ -169,12 +215,12 @@ function ClipDetail() {
         <Center>
             <Box layerStyle='outerContainer'>
                 <Flex>
-                <Breadcrumb>
+                    <Breadcrumb>
                         <BreadcrumbItem>
                             <BreadcrumbLink href='#/songs'> Songs</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
-                            <BreadcrumbLink href={`#/songs/${song.id}`} isCurrentPage> {song?.name}</BreadcrumbLink>
+                            <BreadcrumbLink href={`#/songs/${song?.id}`} isCurrentPage> {song?.name}</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
                             <BreadcrumbLink href={`#/clips/${clipId}`} isCurrentPage> {clip?.name}</BreadcrumbLink>
@@ -185,7 +231,7 @@ function ClipDetail() {
                         <IconButton variant='ghost' onClick={
                             (event) => {
                                 event.stopPropagation();
-                                handleRemoveFavoriteClip(clip.id);
+                                handleRemoveFavoriteClip(clip?.id);
                             }
                         }>
                             <FontAwesomeIcon icon={faHeart} />
@@ -193,7 +239,7 @@ function ClipDetail() {
                         <IconButton variant='ghost' onClick={
                             (event) => {
                                 event.stopPropagation();
-                                handleAddFavoriteClip(clip.id);
+                                handleAddFavoriteClip(clip?.id);
                             }
                         }>
                             <FontAwesomeIcon icon={emptyHeart} />
@@ -206,6 +252,7 @@ function ClipDetail() {
                         />
 
                         <MenuList>
+                            <MenuItem onClick={onOpen}>Copy to New Song</MenuItem>
                             <MenuItem onClick={() => setIsAlertOpen(true)} >Delete Clip</MenuItem>
                         </MenuList>
                     </Menu>
@@ -311,6 +358,47 @@ function ClipDetail() {
                 body={"Are you sure? You can't undo this action afterwards."}
                 deleteFunction={handleDeleteComment}
             />
+
+            {/* MODAL FOR COPYING CLIP TO NEW SONG */}
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Copy Clip to New Song</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <FormControl>
+                            <FormLabel>Song Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="Song Name"
+                                value={nameInput}
+                                required
+                                placeholder='Song Name'
+                                onChange={(event) => setNameInput(event.target.value)} />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Song Description</FormLabel>
+                            <Input
+                                type="text"
+                                name="Song Description"
+                                value={descInput}
+                                required
+                                placeholder='Song Description'
+                                onChange={(event) => setDescInput(event.target.value)} />
+                        </FormControl>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button onClick={() => handleCopyToNewSong()} colorScheme='green' mr={3}>
+                            Create Song
+                        </Button>
+                        <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Center>
     )
 }

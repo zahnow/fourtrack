@@ -44,7 +44,7 @@ function SongList() {
                             <Th>Description</Th>
                             <Th>Band</Th>
                             <Th>Last Updated</Th>
-                            <Th></Th>
+                            <Th>Favorite</Th>
                         </Tr>
                     </Thead>
                     <Tbody>

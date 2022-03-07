@@ -149,22 +149,20 @@ function SongDetail() {
                 </HStack>
                 <Box>
                     <Text textStyle={'pageHeader'}>{song?.name}</Text>
-                    <Text mt={4}>{song?.description}</Text>
+                    <Center><Text my={4}>{song?.description}</Text></Center>
                 </Box>
                 <Center>
                     <Text as='h2' textStyle='subHeader'>Clips</Text>
                 </Center>
                 {clips?.length > 0 ?
                     <>
-                        <Flex>
-                            <Button ml='auto' leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
-                        </Flex>
-                        <Table>
+                        <Center>
+                        <Table maxW='container.lg'>
                             <Thead>
                                 <Tr>
                                     <Th>Clip Name</Th>
                                     <Th>Created At</Th>
-                                    <Th></Th>
+                                    <Th isNumeric>Favorite</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -177,7 +175,7 @@ function SongDetail() {
                                             <Td>
                                                 {dayjs(clip.created_at).fromNow()}
                                             </Td>
-                                            <Td>
+                                            <Td isNumeric>
                                                 {clip.is_favorite ?
                                                     <IconButton variant='ghost' onClick={
                                                         (event) => {
@@ -201,13 +199,16 @@ function SongDetail() {
                                 })}
                             </Tbody>
                         </Table>
+                        </Center>
                     </>
                     :
                     <VStack>
                         <Text>No clips yet!</Text>
-                        <Button leftIcon={<AddIcon />} colorScheme='green' onClick={handleAddClip}>Add Clip</Button>
                     </VStack>
                 }
+                <Center>
+                    <Button my={8} leftIcon={<AddIcon />} colorScheme='green' size='lg' onClick={handleAddClip}>Add Clip</Button>
+                </Center>
                 <Center>
                     <Box width='container.md'>
                         <Center>

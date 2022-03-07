@@ -59,10 +59,11 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const queryString = `
         INSERT INTO "song" ("name", "band_id", "user_id", "description", "created_at", "updated_at")
-        VALUES ($1, $2, $3, $4, NOW(), NOW());`;
+        VALUES ($1, $2, $3, $4, NOW(), NOW())
+        RETURNING "id";`;
     pool.query(queryString, [songName, bandId, userId, songDescription])
         .then(response => {
-            res.sendStatus(201);
+            res.status(201).send(response.rows);
         })
         .catch(error => {
             console.log('Error adding song:', error);
