@@ -35,11 +35,11 @@ function LandingPage() {
           />
           <VStack pos='absolute'>
             <Box>
-              <Text textStyle='pageHeader' color='white'>NEVER LOSE A SONG IDEA</Text>
+              <Text textStyle='pageHeader' color='white'>NEVER LOSE ANOTHER SONG IDEA</Text>
 
             </Box>
             <Box>
-              <Text textStyle='subHeader' color='white'>Collaboration and Cataloging Tools For Musicians</Text>
+              <Text textStyle='subHeader' color='white'>Collaboration and Cataloging Tools for Musicians</Text>
 
             </Box>
           </VStack>

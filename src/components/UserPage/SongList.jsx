@@ -14,7 +14,7 @@ function SongList() {
                     {songs.map(song => <SongCard key={song.id} song={song} />)}
                 </Grid> :
                 <Center my={10}>
-                    <Text>No favorites yet!</Text>
+                    <Text fontSize='2xl'>No favorites yet!</Text>
                 </Center>
             }
 

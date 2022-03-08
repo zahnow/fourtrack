@@ -323,7 +323,7 @@ function ClipDetail() {
                                     onChange={(event) => setCommentInput(event.target.value)}
                                 />
                             </Text>
-                            <Flex>
+                            <Flex mb={4}>
                                 <Spacer />
                                 <Button
                                     ml='auto'
